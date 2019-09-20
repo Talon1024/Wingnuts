@@ -2,23 +2,41 @@
 extends Spatial
 
 class ShieldUnit:
-	var sections = 2
-	var health = 100
-	func _init(ihealth, isections = 2):
-		health = ihealth
-		sections = isections
+	var sections = []
+	func _init(sectionsHealth: Array = []):
+		sections = sectionsHealth
+		# Ensure I'm doing it right. Section 0 should point forwards
+#		print("Section vectors:")
+#		for section in range(len(sections)):
+#			var vectorRotation = float(section) / len(sections) * PI * 2
+#			print(Vector3(0,0,1).rotated(Y_AXIS, vectorRotation))
+
 
 	# Absorb incoming damage
 	# Returns amount of damage to apply to hull
-	func absorb(direction: Vector3, damage: float, absorb: bool = true):
+	func absorb(direction: Vector3, damage: int, absorb: bool = true):
 		if absorb:
-			var rf = direction.dot(self.transform.origin)
-		var hullDamage = health - damage
-		return hullDamage
+			var sectionsDamaged = []
+			for section in range(len(sections)):
+				var vectorRotation = float(section) / len(sections) * PI * 2
+				var sectionVector = Vector3(0,0,1).rotated(Y_AXIS, vectorRotation)
+				var sectionDamageFactor = min(0, -direction.dot(sectionVector))
+				sectionsDamaged.append(sectionDamageFactor)
+			var sectionDamageTotal = 0
+			for sectionDamage in sectionsDamaged:
+				sectionDamageTotal += sectionDamage
+			for sectionIndex in range(len(sectionsDamaged)):
+				sectionsDamaged[sectionIndex] /= sectionDamageTotal
+			var hullDamage = 0
+			return hullDamage
+		else:
+			return damage
 
-#export var baseHealth = 100
+
+export var baseHealth = 100
 export var maxSpeed = 25
-#export var afterburnerSpeed = 100
+export var afterburnerSpeed = 100
+#export var afterburnerAcceleration = 100
 #export var acceleration = 100
 #export var shieldLevel = 1  # Shield capacitor level
 export var pitchSpeed = 90  # DPS
@@ -33,20 +51,18 @@ const Pilot = preload("res://Pilot.gd")
 const ShipControl = Pilot.ShipControl
 
 var controller: Pilot = null
-var controlData: Array = [0, 0, 0, 0, false]
+var controlData: Array = [0, 0, 0, 0, false, false]  # See Pilot.ShipControl
 var pitchDelta: float = 0
 var yawDelta: float = 0
 var rollDelta: float = 0
-#var afterburner: bool = false
-var chaseCam: bool = true
-#var glide: bool = false
-onready var chaseCamPos: Vector3 = $Cockpit.translation
+#var chaseCam: bool = true
+onready var health = baseHealth
 onready var actualPitchSpeed = deg2rad(pitchSpeed)
 onready var actualYawSpeed = deg2rad(yawSpeed)
 onready var actualRollSpeed = deg2rad(rollSpeed)
 #onready var throttleDeltaPerSec = .25  # 1/2 of max speed
 
-#var shieldUnit = ShieldUnit.new()
+var shieldUnit = ShieldUnit.new([50, 50])
 #var guns = 0  # Change to GunUnit class
 #var missiles = 0  # Change to MissileUnit class
 #var activeSpecial = 0  # Special ability
@@ -55,8 +71,13 @@ const X_AXIS = Vector3(1,0,0)
 const Y_AXIS = Vector3(0,1,0)
 const Z_AXIS = Vector3(0,0,1)
 
-func _ready():
-	pass
+
+func receiveDamage(direction: Vector3, damage: int):
+	var damageToTake = damage
+	if shieldUnit:
+		damageToTake = shieldUnit.absorb(direction, damage)
+	health -= damageToTake
+
 
 func _process(delta):
 	if controller is Pilot:
@@ -65,7 +86,12 @@ func _process(delta):
 	pitchDelta = lerp(pitchDelta, actualPitchSpeed * controlData[ShipControl.PITCH], .2)
 	yawDelta = lerp(yawDelta, actualYawSpeed * controlData[ShipControl.YAW], .2)
 	rollDelta = lerp(rollDelta, actualRollSpeed * controlData[ShipControl.ROLL], .2)
-	targetVelocity.z = controlData[ShipControl.THROTTLE] * maxSpeed
+	var afterburner = controlData[ShipControl.AFTERBURNER]
+	if afterburner:
+		targetVelocity.z = afterburnerSpeed
+	else:
+		targetVelocity.z = controlData[ShipControl.THROTTLE] * maxSpeed
+
 
 func _physics_process(delta):
 	rotate_object_local(X_AXIS, pitchDelta * delta)
@@ -78,6 +104,7 @@ func _physics_process(delta):
 	if not controlData[ShipControl.GLIDE]:
 		velocity = lerp(velocity, targetVelocity, .03);
 	translate_object_local(velocity * delta)
+
 
 func _on_Collider_body_entered(body):
 	print("A body has entered the collider:", body.name)

@@ -35,4 +35,8 @@ func think(delta, controls: Array):
 		controls[ShipControl.THROTTLE] = 0
 	if Input.is_action_just_pressed("toggle_glide"):
 		controls[ShipControl.GLIDE] = not controls[ShipControl.GLIDE]
+	if Input.is_action_pressed("afterburner"):
+		controls[ShipControl.AFTERBURNER] = true
+	else:
+		controls[ShipControl.AFTERBURNER] = false
 	return controls

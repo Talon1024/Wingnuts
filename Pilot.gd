@@ -6,6 +6,7 @@ enum ShipControl {
 	ROLL,
 	THROTTLE,
 	GLIDE,
+	AFTERBURNER,
 }
 
 func think(delta, controls: Array):
