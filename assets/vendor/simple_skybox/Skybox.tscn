@@ -4,15 +4,3 @@
 
 [node name="Skybox" type="Spatial"]
 script = ExtResource( 1 )
-TextureFront = null
-frontRotation = 0
-TextureBack = null
-backRotation = 0
-TextureBottom = null
-bottomRotation = 0
-TextureUp = null
-topRotation = 0
-TextureLeft = null
-leftRotation = 0
-TextureRight = null
-rightRotation = 0

@@ -1,5 +1,5 @@
 # Generic space fighter/bomber class
-extends Spatial
+extends KinematicBody
 
 class ShieldUnit:
 	var sections = []
@@ -103,8 +103,5 @@ func _physics_process(delta):
 	velocity = velocity.rotated(Z_AXIS, -rollDelta * delta)
 	if not controlData[ShipControl.GLIDE]:
 		velocity = lerp(velocity, targetVelocity, .03);
-	translate_object_local(velocity * delta)
-
-
-func _on_Collider_body_entered(body):
-	print("A body has entered the collider:", body.name)
+	var physvelocity = transform.basis.xform(velocity)
+	move_and_collide(physvelocity * delta)

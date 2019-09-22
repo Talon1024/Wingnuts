@@ -32,6 +32,7 @@ func create_mat(texture):
 
 func _ready():
 	var i_mesh = MeshInstance.new()
+	i_mesh.cast_shadow = false
 	i_mesh.name = "SkyMeshInstance"
 	i_mesh.mesh = sky_mesh.duplicate(false)
 	add_child(i_mesh)
