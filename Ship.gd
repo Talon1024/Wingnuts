@@ -104,4 +104,9 @@ func _physics_process(delta):
 	if not controlData[ShipControl.GLIDE]:
 		velocity = lerp(velocity, targetVelocity, .03);
 	var physvelocity = transform.basis.xform(velocity)
-	move_and_collide(physvelocity * delta)
+	var collision = move_and_collide(physvelocity * delta)
+	if collision != null:
+		#print(collision.normal)
+		physvelocity = physvelocity.bounce(collision.normal)
+		# Do damage
+		velocity = transform.basis.xform_inv(physvelocity)
