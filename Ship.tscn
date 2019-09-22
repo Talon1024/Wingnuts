@@ -70,3 +70,6 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.17629, 0, -4.22339 )
 
 [node name="Cockpit" type="Position3D" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.444652, 5.16484 )
+
+[node name="RayCast" type="RayCast" parent="."]
+cast_to = Vector3( 0, 0, 1 )
