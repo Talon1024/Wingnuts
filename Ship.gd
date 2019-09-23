@@ -16,18 +16,27 @@ class ShieldUnit:
 	# Returns amount of damage to apply to hull
 	func absorb(direction: Vector3, damage: int, absorb: bool = true):
 		if absorb:
-			var sectionsDamaged = []
-			for section in range(len(sections)):
-				var vectorRotation = float(section) / len(sections) * PI * 2
+			var damagesPerSection = []
+			var sectionCount = len(sections)
+			# Determine damage factor for each section
+			for section in range(sectionCount):
+				var vectorRotation = float(section) / sectionCount * PI * 2
 				var sectionVector = Vector3(0,0,1).rotated(Y_AXIS, vectorRotation)
-				var sectionDamageFactor = min(0, -direction.dot(sectionVector))
-				sectionsDamaged.append(sectionDamageFactor)
-			var sectionDamageTotal = 0
-			for sectionDamage in sectionsDamaged:
-				sectionDamageTotal += sectionDamage
-			for sectionIndex in range(len(sectionsDamaged)):
-				sectionsDamaged[sectionIndex] /= sectionDamageTotal
+				var sectionDamageFactor = -direction.dot(sectionVector) + 1
+				#print("Section damage factor: ", sectionDamageFactor)
+				damagesPerSection.append(sectionDamageFactor)
+			# I used to have a variable named sectionDamageTotal, but it ended
+			# up always being the same as the number of shield sections
 			var hullDamage = 0
+			# Apply the damage
+			for sectionIndex in range(sectionCount):
+				damagesPerSection[sectionIndex] /= sectionCount
+				var damageLeft = round(float(damage) * damagesPerSection[sectionIndex])
+				sections[sectionIndex] -= damageLeft
+				if sections[sectionIndex] < 0:
+					# The hull takes whatever damage the shield section cannot
+					hullDamage -= sections[sectionIndex]  # Negative number
+					sections[sectionIndex] = 0
 			return hullDamage
 		else:
 			return damage
@@ -72,7 +81,13 @@ const Y_AXIS = Vector3(0,1,0)
 const Z_AXIS = Vector3(0,0,1)
 
 
-func receiveDamage(direction: Vector3, damage: int):
+func _floorLowValue(value, threshold = .1):
+	if abs(value) < threshold:
+		return 0
+	return value
+
+
+func _receive_damage(direction: Vector3, damage: int):
 	var damageToTake = damage
 	if shieldUnit:
 		damageToTake = shieldUnit.absorb(direction, damage)
@@ -84,8 +99,11 @@ func _process(delta):
 		controlData = controller.think(delta, controlData)
 
 	pitchDelta = lerp(pitchDelta, actualPitchSpeed * controlData[ShipControl.PITCH], .2)
+	pitchDelta = _floorLowValue(pitchDelta)
 	yawDelta = lerp(yawDelta, actualYawSpeed * controlData[ShipControl.YAW], .2)
+	yawDelta = _floorLowValue(yawDelta)
 	rollDelta = lerp(rollDelta, actualRollSpeed * controlData[ShipControl.ROLL], .2)
+	rollDelta = _floorLowValue(rollDelta)
 	var afterburner = controlData[ShipControl.AFTERBURNER]
 	if afterburner:
 		targetVelocity.z = afterburnerSpeed
@@ -103,10 +121,25 @@ func _physics_process(delta):
 	velocity = velocity.rotated(Z_AXIS, -rollDelta * delta)
 	if not controlData[ShipControl.GLIDE]:
 		velocity = lerp(velocity, targetVelocity, .03);
+	if targetVelocity.x == 0:
+		velocity.x = _floorLowValue(velocity.x)
+	if targetVelocity.y == 0:
+		velocity.y = _floorLowValue(velocity.y)
+	if targetVelocity.z == 0:
+		velocity.z = _floorLowValue(velocity.z)
 	var physvelocity = transform.basis.xform(velocity)
 	var collision = move_and_collide(physvelocity * delta)
 	if collision != null:
-		#print(collision.normal)
+		var obj = collision.collider
+		var norm = transform.basis.xform_inv(collision.normal)
+		print(collision.collider.name)
+		# Bounce
+		#if _should_bounce(obj):
 		physvelocity = physvelocity.bounce(collision.normal)
-		# Do damage
 		velocity = transform.basis.xform_inv(physvelocity)
+		# Do damage
+		#if _should_receive_damage(obj):
+		var damage = 0
+		if obj.has_method("get_damage"):
+			damage = obj.get_damage()
+		_receive_damage(norm, damage)
