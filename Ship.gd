@@ -75,6 +75,7 @@ var shieldUnit = ShieldUnit.new([50, 50])
 #var guns = 0  # Change to GunUnit class
 #var missiles = 0  # Change to MissileUnit class
 #var activeSpecial = 0  # Special ability
+var shieldShowTime = 0 setget set_shield_time
 
 const X_AXIS = Vector3(1,0,0)
 const Y_AXIS = Vector3(0,1,0)
@@ -87,10 +88,27 @@ func _floorLowValue(value, threshold = .1):
 	return value
 
 
-func _receive_damage(direction: Vector3, damage: int):
+func set_shield_time(shieldTime: float):
+	if shieldTime > 0:
+		$ShieldVisual.visible = true
+		var shieldMtl = $ShieldVisual.get_surface_material(0)
+		if shieldMtl.has_method("set_shader_param"):
+			shieldMtl.set_shader_param("showTime", shieldTime)
+	else:
+		$ShieldVisual.visible = false
+
+
+func _receive_damage(direction: Vector3, position: Vector3, damage: int):
 	var damageToTake = damage
 	if shieldUnit:
 		damageToTake = shieldUnit.absorb(direction, damage)
+		$Tween.interpolate_property(self, ":shieldShowTime", 1.0, 0.0, 0.5, Tween.TRANS_LINEAR, Tween.EASE_OUT)
+		$Tween.start()
+		var shieldMtl = $ShieldVisual.get_surface_material(0)
+		if shieldMtl.has_method("set_shader_param"):
+			print("impactDirection: ", direction)
+			shieldMtl.set_shader_param("impactDirection", direction)
+			shieldMtl.set_shader_param("impactLocation", position)
 	health -= damageToTake
 
 
@@ -132,6 +150,7 @@ func _physics_process(delta):
 	if collision != null:
 		var obj = collision.collider
 		var norm = transform.basis.xform_inv(collision.normal)
+		var pos = transform.basis.xform_inv(collision.position)
 		print(collision.collider.name)
 		# Bounce
 		#if _should_bounce(obj):
@@ -142,4 +161,4 @@ func _physics_process(delta):
 		var damage = 0
 		if obj.has_method("get_damage"):
 			damage = obj.get_damage()
-		_receive_damage(norm, damage)
+		_receive_damage(norm, pos, damage)
