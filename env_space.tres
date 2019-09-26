@@ -4,6 +4,7 @@
 background_color = Color( 0.752941, 0.243137, 0.243137, 1 )
 ambient_light_color = Color( 0.25098, 0.25098, 0.25098, 1 )
 tonemap_mode = 3
+ss_reflections_enabled = true
 ssao_enabled = true
 dof_blur_near_enabled = true
 glow_enabled = true

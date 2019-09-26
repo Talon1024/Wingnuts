@@ -47,6 +47,7 @@ TextureRight = ExtResource( 9 )
 
 [node name="DirectionalLight" type="DirectionalLight" parent="."]
 transform = Transform( 0.839219, 0.26903, -0.472582, 0.235507, 0.60351, 0.761783, 0.49015, -0.750599, 0.443118, -8.34762, 4.34677, -2.00028 )
+shadow_enabled = true
 
 [node name="PlanetA" type="StaticBody" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -36.5356, 39.6187, 35.6694 )

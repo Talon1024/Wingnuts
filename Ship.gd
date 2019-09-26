@@ -41,7 +41,10 @@ class ShieldUnit:
 		else:
 			return damage
 
+# Resources
+onready var shieldVisual = $ShieldVisual
 
+# Stats
 export var baseHealth = 100
 export var maxSpeed = 25
 export var afterburnerSpeed = 100
@@ -52,31 +55,34 @@ export var pitchSpeed = 90  # DPS
 export var yawSpeed = 90
 export var rollSpeed = 90
 #export var mass = 100  # Used to determine damage and knockback
+onready var health = baseHealth
 
-var targetVelocity: Vector3 = Vector3(0,0,0)
-var velocity: Vector3 = Vector3(0,0,0)
-
+# Control
 const Pilot = preload("res://Pilot.gd")
 const ShipControl = Pilot.ShipControl
-
+var targetVelocity: Vector3 = Vector3(0,0,0)
 var controller: Pilot = null
 var controlData: Array = [0, 0, 0, 0, false, false]  # See Pilot.ShipControl
+
+# Physics
+var velocity: Vector3 = Vector3(0,0,0)
 var pitchDelta: float = 0
 var yawDelta: float = 0
 var rollDelta: float = 0
 #var chaseCam: bool = true
-onready var health = baseHealth
 onready var actualPitchSpeed = deg2rad(pitchSpeed)
 onready var actualYawSpeed = deg2rad(yawSpeed)
 onready var actualRollSpeed = deg2rad(rollSpeed)
 #onready var throttleDeltaPerSec = .25  # 1/2 of max speed
 
+# Equipment
 var shieldUnit = ShieldUnit.new([50, 50])
 #var guns = 0  # Change to GunUnit class
 #var missiles = 0  # Change to MissileUnit class
 #var activeSpecial = 0  # Special ability
 var shieldShowTime = 0 setget set_shield_time
 
+# Constants
 const X_AXIS = Vector3(1,0,0)
 const Y_AXIS = Vector3(0,1,0)
 const Z_AXIS = Vector3(0,0,1)
@@ -89,26 +95,28 @@ func _floorLowValue(value, threshold = .1):
 
 
 func set_shield_time(shieldTime: float):
-	if shieldTime > 0:
-		$ShieldVisual.visible = true
-		var shieldMtl = $ShieldVisual.get_surface_material(0)
-		if shieldMtl.has_method("set_shader_param"):
-			shieldMtl.set_shader_param("showTime", shieldTime)
-	else:
-		$ShieldVisual.visible = false
+	if shieldVisual:
+		if shieldTime > 0:
+			shieldVisual.visible = true
+			var shieldMtl = shieldVisual.get_surface_material(0)
+			if shieldMtl.has_method("set_shader_param"):
+				shieldMtl.set_shader_param("showTime", shieldTime)
+		else:
+			shieldVisual.visible = false
 
 
 func _receive_damage(direction: Vector3, position: Vector3, damage: int):
 	var damageToTake = damage
 	if shieldUnit:
 		damageToTake = shieldUnit.absorb(direction, damage)
-		$Tween.interpolate_property(self, ":shieldShowTime", 1.0, 0.0, 0.5, Tween.TRANS_LINEAR, Tween.EASE_OUT)
-		$Tween.start()
-		var shieldMtl = $ShieldVisual.get_surface_material(0)
-		if shieldMtl.has_method("set_shader_param"):
-			print("impactDirection: ", direction)
-			shieldMtl.set_shader_param("impactDirection", direction)
-			shieldMtl.set_shader_param("impactLocation", position)
+		if shieldVisual:
+			$Tween.interpolate_property(self, ":shieldShowTime", 1.0, 0.0, 0.5, Tween.TRANS_LINEAR, Tween.EASE_OUT)
+			$Tween.start()
+			var shieldMtl = $ShieldVisual.get_surface_material(0)
+			if shieldMtl.has_method("set_shader_param"):
+				print("impactDirection: ", direction)
+				shieldMtl.set_shader_param("impactDirection", direction)
+				shieldMtl.set_shader_param("impactLocation", position)
 	health -= damageToTake
 
 
@@ -151,7 +159,7 @@ func _physics_process(delta):
 		var obj = collision.collider
 		var norm = transform.basis.xform_inv(collision.normal)
 		var pos = transform.basis.xform_inv(collision.position)
-		print(collision.collider.name)
+		#print(collision.collider.name)
 		# Bounce
 		#if _should_bounce(obj):
 		physvelocity = physvelocity.bounce(collision.normal)
