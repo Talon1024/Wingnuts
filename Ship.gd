@@ -3,83 +3,82 @@ extends KinematicBody
 
 class ShieldUnit:
 	var sections = []
-	func _init(sectionsHealth: Array = []):
-		sections = sectionsHealth
+	func _init(sections_health: Array = []):
+		sections = sections_health
 		# Ensure I'm doing it right. Section 0 should point forwards
 #		print("Section vectors:")
 #		for section in range(len(sections)):
-#			var vectorRotation = float(section) / len(sections) * PI * 2
-#			print(Vector3(0,0,1).rotated(Y_AXIS, vectorRotation))
+#			var vector_rotation = float(section) / len(sections) * PI * 2
+#			print(Vector3(0,0,1).rotated(Y_AXIS, vector_rotation))
 
 
 	# Absorb incoming damage
 	# Returns amount of damage to apply to hull
 	func absorb(direction: Vector3, damage: int, absorb: bool = true):
 		if absorb:
-			var damagesPerSection = []
-			var sectionCount = len(sections)
+			var damages_per_section = []
+			var section_count = len(sections)
 			# Determine damage factor for each section
-			for section in range(sectionCount):
-				var vectorRotation = float(section) / sectionCount * PI * 2
-				var sectionVector = Vector3(0,0,1).rotated(Y_AXIS, vectorRotation)
-				var sectionDamageFactor = -direction.dot(sectionVector) + 1
-				#print("Section damage factor: ", sectionDamageFactor)
-				damagesPerSection.append(sectionDamageFactor)
+			for section in range(section_count):
+				var vector_rotation = float(section) / section_count * PI * 2
+				var section_vector = Vector3(0,0,1).rotated(Y_AXIS, vector_rotation)
+				var section_damage_factor = -direction.dot(section_vector) + 1
+				#print("Section damage factor: ", section_damage_factor)
+				damages_per_section.append(section_damage_factor)
 			# I used to have a variable named sectionDamageTotal, but it ended
 			# up always being the same as the number of shield sections
-			var hullDamage = 0
+			var hull_damage = 0
 			# Apply the damage
-			for sectionIndex in range(sectionCount):
-				damagesPerSection[sectionIndex] /= sectionCount
-				var damageLeft = round(float(damage) * damagesPerSection[sectionIndex])
-				sections[sectionIndex] -= damageLeft
-				if sections[sectionIndex] < 0:
+			for section in range(section_count):
+				damages_per_section[section] /= section_count
+				var damage_left = round(float(damage) * damages_per_section[section])
+				sections[section] -= damage_left
+				if sections[section] < 0:
 					# The hull takes whatever damage the shield section cannot
-					hullDamage -= sections[sectionIndex]  # Negative number
-					sections[sectionIndex] = 0
-			return hullDamage
+					hull_damage -= sections[section]  # Negative number
+					sections[section] = 0
+			return hull_damage
 		else:
 			return damage
 
 # Resources
-onready var shieldVisual = $ShieldVisual
+onready var shield_visual = $ShieldVisual
 
 # Stats
-export var baseHealth = 100
-export var maxSpeed = 25
-export var afterburnerSpeed = 100
+export var base_health = 100
+export var max_speed = 25
+export var afterburner_speed = 100
 #export var afterburnerAcceleration = 120
 #export var acceleration = 30
 #export var shieldLevel = 1  # Shield capacitor level
-export var pitchSpeed = 90  # DPS
-export var yawSpeed = 90
-export var rollSpeed = 90
+export var pitch_speed = 90  # DPS
+export var yaw_speed = 90
+export var roll_speed = 90
 #export var mass = 100  # Used to determine damage and knockback
-onready var health = baseHealth
+onready var health = base_health
 
 # Control
 const Pilot = preload("res://Pilot.gd")
 const ShipControl = Pilot.ShipControl
-var targetVelocity: Vector3 = Vector3(0,0,0)
+var target_velocity: Vector3 = Vector3(0,0,0)
 var controller: Pilot = null
-var controlData: Array = [0, 0, 0, 0, false, false, false, false]  # See Pilot.ShipControl
+var control_data: Array = [0, 0, 0, 0, false, false, false, false]  # See Pilot.ShipControl
 
 # Physics
 var velocity: Vector3 = Vector3(0,0,0)
-var pitchDelta: float = 0
-var yawDelta: float = 0
-var rollDelta: float = 0
-onready var actualPitchSpeed = deg2rad(pitchSpeed)
-onready var actualYawSpeed = deg2rad(yawSpeed)
-onready var actualRollSpeed = deg2rad(rollSpeed)
-#onready var throttleDeltaPerSec = .25  # 1/2 of max speed
+var pitch_delta: float = 0
+var yaw_delta: float = 0
+var roll_delta: float = 0
+onready var actual_pitch_speed = deg2rad(pitch_speed)
+onready var actual_yaw_speed = deg2rad(yaw_speed)
+onready var actual_roll_speed = deg2rad(roll_speed)
 
 # Equipment
-var shieldUnit = ShieldUnit.new([50, 50])
+var shield_unit = ShieldUnit.new([50, 50])
 #var guns = 0  # Change to GunUnit class
 #var missiles = 0  # Change to MissileUnit class
 #var activeSpecial = 0  # Special ability, such as cloaking device
-var shieldShowTime = 0 setget set_shield_time
+var shield_show_time = 0 setget set_shield_time
 
 # Constants
 const X_AXIS = Vector3(1,0,0)
@@ -93,69 +92,71 @@ func _floorLowValue(value, threshold = .1):
 	return value
 
 
-func set_shield_time(shieldTime: float):
-	if shieldVisual:
-		if shieldTime > 0:
-			shieldVisual.visible = true
-			var shieldMtl = shieldVisual.get_surface_material(0)
-			if shieldMtl.has_method("set_shader_param"):
-				shieldMtl.set_shader_param("showTime", shieldTime)
+func set_shield_time(shield_time: float):
+	if shield_visual:
+		if shield_time > 0:
+			shield_visual.visible = true
+			var shield_mtl = shield_visual.get_surface_material(0)
+			if shield_mtl.has_method("set_shader_param"):
+				shield_mtl.set_shader_param("showTime", shield_time)
 		else:
-			shieldVisual.visible = false
+			shield_visual.visible = false
 
 
 func _receive_damage(direction: Vector3, position: Vector3, damage: int):
-	var damageToTake = damage
-	if shieldUnit:
-		damageToTake = shieldUnit.absorb(direction, damage)
-		if shieldVisual:
+	var damage_to_take = damage
+	if shield_unit:
+		damage_to_take = shield_unit.absorb(direction, damage)
+		if shield_visual:
 			$Tween.interpolate_property(self,
-					":shieldShowTime", 1.0, 0.0, 0.5,
+					":shield_show_time", 1.0, 0.0, 0.5,
 					Tween.TRANS_LINEAR, Tween.EASE_OUT)
 			$Tween.start()
-			var shieldMtl = shieldVisual.get_surface_material(0)
-			if shieldMtl.has_method("set_shader_param"):
+			var shield_mtl = shield_visual.get_surface_material(0)
+			if shield_mtl.has_method("set_shader_param"):
 				print("impactDirection: ", direction)
-				shieldMtl.set_shader_param("impactDirection", direction)
-				shieldMtl.set_shader_param("impactLocation", position)
-	health -= damageToTake
+				shield_mtl.set_shader_param("impactDirection", direction)
+				shield_mtl.set_shader_param("impactLocation", position)
+	health -= damage_to_take
 
 
 func _process(delta):
 	if controller is Pilot:
-		controlData = controller.think(delta, controlData)
+		control_data = controller.think(delta, control_data)
 
-	pitchDelta = lerp(pitchDelta, actualPitchSpeed * controlData[ShipControl.PITCH], .2)
-	pitchDelta = _floorLowValue(pitchDelta)
-	yawDelta = lerp(yawDelta, actualYawSpeed * controlData[ShipControl.YAW], .2)
-	yawDelta = _floorLowValue(yawDelta)
-	rollDelta = lerp(rollDelta, actualRollSpeed * controlData[ShipControl.ROLL], .2)
-	rollDelta = _floorLowValue(rollDelta)
-	var afterburner = controlData[ShipControl.AFTERBURNER]
+	pitch_delta = lerp(pitch_delta, actual_pitch_speed * control_data[ShipControl.PITCH], .2)
+	pitch_delta = _floorLowValue(pitch_delta)
+	yaw_delta = lerp(yaw_delta, actual_yaw_speed * control_data[ShipControl.YAW], .2)
+	yaw_delta = _floorLowValue(yaw_delta)
+	roll_delta = lerp(roll_delta, actual_roll_speed * control_data[ShipControl.ROLL], .2)
+	roll_delta = _floorLowValue(roll_delta)
+	var afterburner = control_data[ShipControl.AFTERBURNER]
 	if afterburner:
-		targetVelocity.z = afterburnerSpeed
+		target_velocity.z = afterburner_speed
 	else:
-		targetVelocity.z = controlData[ShipControl.THROTTLE] * maxSpeed
+		target_velocity.z = control_data[ShipControl.THROTTLE] * max_speed
 
 
 func _physics_process(delta):
-	rotate_object_local(X_AXIS, pitchDelta * delta)
-	rotate_object_local(Y_AXIS, yawDelta * delta)
-	rotate_object_local(Z_AXIS, rollDelta * delta)
+	rotate_object_local(X_AXIS, pitch_delta * delta)
+	rotate_object_local(Y_AXIS, yaw_delta * delta)
+	rotate_object_local(Z_AXIS, roll_delta * delta)
 
-	velocity = velocity.rotated(X_AXIS, -pitchDelta * delta)
-	velocity = velocity.rotated(Y_AXIS, -yawDelta * delta)
-	velocity = velocity.rotated(Z_AXIS, -rollDelta * delta)
-	if not controlData[ShipControl.GLIDE]:
-#		var lerpWeight = float(maxSpeed) / acceleration * delta / (velocity.length() / (velocity.length() - targetVelocity.length()))
-#		if controlData[ShipControl.AFTERBURNER]:
-#			lerpWeight = float(afterburnerSpeed) / afterburnerAcceleration * delta
-		velocity = lerp(velocity, targetVelocity, .03)
-	if targetVelocity.x == 0:
+	velocity = velocity.rotated(X_AXIS, -pitch_delta * delta)
+	velocity = velocity.rotated(Y_AXIS, -yaw_delta * delta)
+	velocity = velocity.rotated(Z_AXIS, -roll_delta * delta)
+
+#	var current_acceleration = acceleration
+#	if control_data[ShipControl.AFTERBURNER]:
+#		current_acceleration = afterburner_acceleration
+	if not control_data[ShipControl.GLIDE]:
+		velocity = lerp(velocity, target_velocity, .03)
+#		velocity = velocity.move_toward(target_velocity, current_acceleration) # Unstable branch feature
+	if target_velocity.x == 0:
 		velocity.x = _floorLowValue(velocity.x)
-	if targetVelocity.y == 0:
+	if target_velocity.y == 0:
 		velocity.y = _floorLowValue(velocity.y)
-	if targetVelocity.z == 0:
+	if target_velocity.z == 0:
 		velocity.z = _floorLowValue(velocity.z)
 	var physvelocity = transform.basis.xform(velocity)
 	var collision = move_and_collide(physvelocity * delta)
