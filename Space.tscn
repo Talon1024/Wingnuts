@@ -1,19 +1,15 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://Space.gd" type="Script" id=1]
 [ext_resource path="res://Ship.tscn" type="PackedScene" id=2]
-[ext_resource path="res://assets/vendor/simple_skybox/Skybox.tscn" type="PackedScene" id=3]
-[ext_resource path="res://assets/vendor/ulukai/corona_ft.png" type="Texture" id=4]
-[ext_resource path="res://assets/vendor/ulukai/corona_bk.png" type="Texture" id=5]
-[ext_resource path="res://assets/vendor/ulukai/corona_dn.png" type="Texture" id=6]
-[ext_resource path="res://assets/vendor/ulukai/corona_up.png" type="Texture" id=7]
-[ext_resource path="res://assets/vendor/ulukai/corona_lf.png" type="Texture" id=8]
-[ext_resource path="res://assets/vendor/ulukai/corona_rt.png" type="Texture" id=9]
-[ext_resource path="res://planet_physmat.tres" type="PhysicsMaterial" id=10]
-[ext_resource path="res://HUD.tscn" type="PackedScene" id=11]
-[ext_resource path="res://Pause.tscn" type="PackedScene" id=12]
-[ext_resource path="res://Fullscreen.tscn" type="PackedScene" id=13]
-[ext_resource path="res://env_space.tres" type="Environment" id=14]
+[ext_resource path="res://planet_physmat.tres" type="PhysicsMaterial" id=3]
+[ext_resource path="res://HUD.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Pause.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Fullscreen.tscn" type="PackedScene" id=6]
+[ext_resource path="res://assets/env_space.tres" type="Environment" id=7]
+[ext_resource path="res://SpaceEnvironment.gd" type="Script" id=8]
+[ext_resource path="res://assets/vendor/ulukai/corona_equirectangular.png" type="Texture" id=9]
+[ext_resource path="res://assets/music/OutThere.ogg" type="AudioStream" id=10]
 
 [sub_resource type="SphereShape" id=1]
 radius = 7.0
@@ -32,26 +28,19 @@ script = ExtResource( 1 )
 [node name="Player" parent="." instance=ExtResource( 2 )]
 
 [node name="Camera" type="Camera" parent="Player"]
-transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 4.13254, -15.3152 )
 keep_aspect = 0
 fov = 100.0
-far = 8192.0
+far = 1000.0
 
-[node name="Skybox" parent="." instance=ExtResource( 3 )]
-TextureFront = ExtResource( 4 )
-TextureBack = ExtResource( 5 )
-TextureBottom = ExtResource( 6 )
-TextureUp = ExtResource( 7 )
-TextureLeft = ExtResource( 8 )
-TextureRight = ExtResource( 9 )
-
-[node name="DirectionalLight" type="DirectionalLight" parent="."]
+[node name="SunLight" type="DirectionalLight" parent="."]
 transform = Transform( 0.839219, 0.26903, -0.472582, 0.235507, 0.60351, 0.761783, 0.49015, -0.750599, 0.443118, -8.34762, 4.34677, -2.00028 )
+light_bake_mode = 0
 shadow_enabled = true
+directional_shadow_blend_splits = true
 
 [node name="PlanetA" type="StaticBody" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -36.5356, 39.6187, 35.6694 )
-physics_material_override = ExtResource( 10 )
+physics_material_override = ExtResource( 3 )
 
 [node name="CollisionShape" type="CollisionShape" parent="PlanetA"]
 shape = SubResource( 1 )
@@ -61,11 +50,11 @@ transform = Transform( 7, 0, 0, 0, 7, 0, 0, 0, 7, 0, 0, 0 )
 mesh = SubResource( 2 )
 material/0 = null
 
-[node name="HUD" parent="." instance=ExtResource( 11 )]
+[node name="HUD" parent="." instance=ExtResource( 4 )]
 
 [node name="PlanetBox" type="StaticBody" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 43.1047, 0, -13.0719 )
-physics_material_override = ExtResource( 10 )
+physics_material_override = ExtResource( 3 )
 
 [node name="MeshInstance" type="MeshInstance" parent="PlanetBox"]
 transform = Transform( 16, 0, 0, 0, 16, 0, 0, 0, 16, 0, 0, 0 )
@@ -75,10 +64,23 @@ material/0 = null
 [node name="CollisionShape" type="CollisionShape" parent="PlanetBox"]
 shape = SubResource( 4 )
 
-[node name="Pause" parent="." instance=ExtResource( 12 )]
+[node name="Pause" parent="." instance=ExtResource( 5 )]
 visible = false
 
-[node name="Fullscreen" parent="." instance=ExtResource( 13 )]
+[node name="Misc controls" parent="." instance=ExtResource( 6 )]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = ExtResource( 14 )
+[node name="SpaceEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource( 7 )
+script = ExtResource( 8 )
+background_panorama_image = ExtResource( 9 )
+
+[node name="BGMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 10 )
+volume_db = 5.0
+autoplay = true
+
+[node name="ChaseCamera" type="InterpolatedCamera" parent="."]
+keep_aspect = 0
+fov = 100.0
+far = 1000.0
+speed = 7.0
