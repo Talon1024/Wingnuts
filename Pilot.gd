@@ -7,6 +7,8 @@ enum ShipControl {
 	THROTTLE,
 	GLIDE,
 	AFTERBURNER,
+	FIRE_GUN,
+	FIRE_MISSILE,
 }
 
 func think(delta, controls: Array):

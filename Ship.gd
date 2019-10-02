@@ -48,8 +48,8 @@ onready var shieldVisual = $ShieldVisual
 export var baseHealth = 100
 export var maxSpeed = 25
 export var afterburnerSpeed = 100
-#export var afterburnerAcceleration = 100
-#export var acceleration = 100
+#export var afterburnerAcceleration = 120
+#export var acceleration = 30
 #export var shieldLevel = 1  # Shield capacitor level
 export var pitchSpeed = 90  # DPS
 export var yawSpeed = 90
@@ -62,14 +62,13 @@ const Pilot = preload("res://Pilot.gd")
 const ShipControl = Pilot.ShipControl
 var targetVelocity: Vector3 = Vector3(0,0,0)
 var controller: Pilot = null
-var controlData: Array = [0, 0, 0, 0, false, false]  # See Pilot.ShipControl
+var controlData: Array = [0, 0, 0, 0, false, false, false, false]  # See Pilot.ShipControl
 
 # Physics
 var velocity: Vector3 = Vector3(0,0,0)
 var pitchDelta: float = 0
 var yawDelta: float = 0
 var rollDelta: float = 0
-#var chaseCam: bool = true
 onready var actualPitchSpeed = deg2rad(pitchSpeed)
 onready var actualYawSpeed = deg2rad(yawSpeed)
 onready var actualRollSpeed = deg2rad(rollSpeed)
@@ -79,7 +78,7 @@ onready var actualRollSpeed = deg2rad(rollSpeed)
 var shieldUnit = ShieldUnit.new([50, 50])
 #var guns = 0  # Change to GunUnit class
 #var missiles = 0  # Change to MissileUnit class
-#var activeSpecial = 0  # Special ability
+#var activeSpecial = 0  # Special ability, such as cloaking device
 var shieldShowTime = 0 setget set_shield_time
 
 # Constants
@@ -110,9 +109,11 @@ func _receive_damage(direction: Vector3, position: Vector3, damage: int):
 	if shieldUnit:
 		damageToTake = shieldUnit.absorb(direction, damage)
 		if shieldVisual:
-			$Tween.interpolate_property(self, ":shieldShowTime", 1.0, 0.0, 0.5, Tween.TRANS_LINEAR, Tween.EASE_OUT)
+			$Tween.interpolate_property(self,
+					":shieldShowTime", 1.0, 0.0, 0.5,
+					Tween.TRANS_LINEAR, Tween.EASE_OUT)
 			$Tween.start()
-			var shieldMtl = $ShieldVisual.get_surface_material(0)
+			var shieldMtl = shieldVisual.get_surface_material(0)
 			if shieldMtl.has_method("set_shader_param"):
 				print("impactDirection: ", direction)
 				shieldMtl.set_shader_param("impactDirection", direction)
@@ -146,7 +147,10 @@ func _physics_process(delta):
 	velocity = velocity.rotated(Y_AXIS, -yawDelta * delta)
 	velocity = velocity.rotated(Z_AXIS, -rollDelta * delta)
 	if not controlData[ShipControl.GLIDE]:
-		velocity = lerp(velocity, targetVelocity, .03);
+#		var lerpWeight = float(maxSpeed) / acceleration * delta / (velocity.length() / (velocity.length() - targetVelocity.length()))
+#		if controlData[ShipControl.AFTERBURNER]:
+#			lerpWeight = float(afterburnerSpeed) / afterburnerAcceleration * delta
+		velocity = lerp(velocity, targetVelocity, .03)
 	if targetVelocity.x == 0:
 		velocity.x = _floorLowValue(velocity.x)
 	if targetVelocity.y == 0:
@@ -159,13 +163,10 @@ func _physics_process(delta):
 		var obj = collision.collider
 		var norm = transform.basis.xform_inv(collision.normal)
 		var pos = transform.basis.xform_inv(collision.position)
-		#print(collision.collider.name)
 		# Bounce
-		#if _should_bounce(obj):
 		physvelocity = physvelocity.bounce(collision.normal)
 		velocity = transform.basis.xform_inv(physvelocity)
 		# Do damage
-		#if _should_receive_damage(obj):
 		var damage = 0
 		if obj.has_method("get_damage"):
 			damage = obj.get_damage()
