@@ -9,7 +9,10 @@ func _process(delta):
 		setSpeed = Player.afterburnerSpeed
 	else:
 		setSpeed = Player.controlData[ShipControl.THROTTLE] * Player.maxSpeed
-	$SetDisplay.text = "SET: %.4f" % setSpeed
+
+	$SetContainer/SetDisplay.text = "SET: %.4f" % setSpeed
+	$KpsContainer/KpsDisplay.text = "KPS: %.4f" % Player.velocity.length()
+
 	if Player.controlData[ShipControl.GLIDE]:
-		$SetDisplay.text += "G"
-	$KpsDisplay.text = "KPS: %.4f" % Player.velocity.length()
+		$SetContainer/SetDisplay.text += "G"
+		$KpsContainer/KpsDisplay.text += "G"
