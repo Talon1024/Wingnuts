@@ -1,6 +1,5 @@
 extends KinematicBody
 
-var shooter: KinematicBody
 var velocity: Vector3
 var lifetime: float = 2.0
 var refire: float = 1.0

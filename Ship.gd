@@ -155,9 +155,9 @@ func _process(delta):
 	roll_delta = _floorLowValue(roll_delta)
 
 	if control_data.afterburner:
-		target_velocity.z = afterburner_speed
+		target_velocity.z = -afterburner_speed
 	else:
-		target_velocity.z = control_data.throttle * max_speed
+		target_velocity.z = -control_data.throttle * max_speed
 
 	if control_data.fire_gun:
 		for gun in guns:

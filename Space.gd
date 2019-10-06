@@ -30,9 +30,8 @@ func _process(delta):
 		player.visible = false
 
 func _on_Player_weapon_fired(shooter: KinematicBody, transform: Transform, weapon_scene: PackedScene):
-	print("bullet global transform: ", transform)
 	var bullet = weapon_scene.instance()
-	bullet.shooter = shooter
+	bullet.add_collision_exception_with(shooter)
 	bullet.global_transform = transform
-	bullet.velocity = transform.basis.xform(Vector3.BACK * bullet.speed)
+	bullet.velocity = transform.basis.xform(Vector3.FORWARD * bullet.speed)
 	add_child(bullet)

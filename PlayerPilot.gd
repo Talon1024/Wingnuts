@@ -9,9 +9,9 @@ func handle_key_pair(pos: String, neg: String):
 		return 0.0
 
 func think(delta, controls: Dictionary) -> Dictionary:
-	controls.pitch = handle_key_pair("pitch_down", "pitch_up")
+	controls.pitch = handle_key_pair("pitch_up", "pitch_down")
 	controls.yaw = handle_key_pair("turn_left", "turn_right")
-	controls.roll = handle_key_pair("roll_right", "roll_left")
+	controls.roll = handle_key_pair("roll_left", "roll_right")
 	if Input.is_action_just_pressed("speed_stop"):
 		controls.throttle = 0
 	elif Input.is_action_just_pressed("speed_full"):
