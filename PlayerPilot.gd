@@ -17,10 +17,8 @@ func think(delta, controls: Dictionary) -> Dictionary:
 	elif Input.is_action_just_pressed("speed_full"):
 		controls.throttle = 1
 	elif Input.is_action_pressed("speed_increment"):
-		#controls.throttle += throttleDeltaPerSec * delta
 		controls.throttle += .25 * delta
 	elif Input.is_action_pressed("speed_decrement"):
-		#controls.throttle -= throttleDeltaPerSec * delta
 		controls.throttle -= .25 * delta
 	if controls.throttle > 1:
 		controls.throttle = 1
