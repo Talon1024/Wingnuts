@@ -1,41 +1,34 @@
 extends "res://Pilot.gd"
 
-func think(delta, controls: Array):
-	if Input.is_action_pressed("pitch_up"):
-		controls[ShipControl.PITCH] = -1
-	elif Input.is_action_pressed("pitch_down"):
-		controls[ShipControl.PITCH] = 1
+func handle_key_pair(pos: String, neg: String):
+	if Input.is_action_pressed(pos):
+		return 1.0
+	elif Input.is_action_pressed(neg):
+		return -1.0
 	else:
-		controls[ShipControl.PITCH] = 0
-	if Input.is_action_pressed("turn_left"):
-		controls[ShipControl.YAW] = 1
-	elif Input.is_action_pressed("turn_right"):
-		controls[ShipControl.YAW] = -1
-	else:
-		controls[ShipControl.YAW] = 0
-	if Input.is_action_pressed("roll_left"):
-		controls[ShipControl.ROLL] = -1
-	elif Input.is_action_pressed("roll_right"):
-		controls[ShipControl.ROLL] = 1
-	else:
-		controls[ShipControl.ROLL] = 0
+		return 0.0
+
+func think(delta, controls: Dictionary) -> Dictionary:
+	controls.pitch = handle_key_pair("pitch_down", "pitch_up")
+	controls.yaw = handle_key_pair("turn_left", "turn_right")
+	controls.roll = handle_key_pair("roll_right", "roll_left")
 	if Input.is_action_just_pressed("speed_stop"):
-		controls[ShipControl.THROTTLE] = 0
+		controls.throttle = 0
 	elif Input.is_action_just_pressed("speed_full"):
-		controls[ShipControl.THROTTLE] = 1
+		controls.throttle = 1
 	elif Input.is_action_pressed("speed_increment"):
 		#controls.throttle += throttleDeltaPerSec * delta
-		controls[ShipControl.THROTTLE] += .25 * delta
+		controls.throttle += .25 * delta
 	elif Input.is_action_pressed("speed_decrement"):
 		#controls.throttle -= throttleDeltaPerSec * delta
-		controls[ShipControl.THROTTLE] -= .25 * delta
-	if controls[ShipControl.THROTTLE] > 1:
-		controls[ShipControl.THROTTLE] = 1
-	elif controls[ShipControl.THROTTLE] < 0:
-		controls[ShipControl.THROTTLE] = 0
+		controls.throttle -= .25 * delta
+	if controls.throttle > 1:
+		controls.throttle = 1
+	elif controls.throttle < 0:
+		controls.throttle = 0
 	if Input.is_action_just_pressed("toggle_glide"):
-		controls[ShipControl.GLIDE] = not controls[ShipControl.GLIDE]
-	controls[ShipControl.AFTERBURNER] = Input.is_action_pressed("afterburner")
-	controls[ShipControl.FIRE_GUN] = Input.is_action_pressed("fire_gun")
-	controls[ShipControl.FIRE_MISSILE] = Input.is_action_pressed("fire_missile")
+		controls.glide = not controls.glide
+	controls.afterburner = Input.is_action_pressed("afterburner")
+	controls.fire_gun = Input.is_action_pressed("fire_gun")
+	controls.fire_missile = Input.is_action_pressed("fire_missile")
 	return controls

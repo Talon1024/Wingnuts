@@ -59,10 +59,19 @@ onready var health = base_health
 
 # Control
 const Pilot = preload("res://Pilot.gd")
-const ShipControl = Pilot.ShipControl
 var target_velocity: Vector3 = Vector3(0,0,0)
 var controller: Pilot = null
-var control_data: Array = [0, 0, 0, 0, false, false, false, false]  # See Pilot.ShipControl
+#var control_data: Array = [0, 0, 0, 0, false, false, false, false]  # See Pilot.ShipControl
+var control_data: Dictionary = {
+	"yaw": 0.0,
+	"pitch": 0.0,
+	"roll": 0.0,
+	"throttle": 0.0,
+	"glide": false,
+	"afterburner": false,
+	"fire_gun": false,
+	"fire_missile": false,
+}
 
 # Physics
 var velocity: Vector3 = Vector3(0,0,0)
@@ -124,17 +133,17 @@ func _process(delta):
 	if controller is Pilot:
 		control_data = controller.think(delta, control_data)
 
-	pitch_delta = lerp(pitch_delta, actual_pitch_speed * control_data[ShipControl.PITCH], .2)
+	pitch_delta = lerp(pitch_delta, actual_pitch_speed * control_data.pitch, .2)
 	pitch_delta = _floorLowValue(pitch_delta)
-	yaw_delta = lerp(yaw_delta, actual_yaw_speed * control_data[ShipControl.YAW], .2)
+	yaw_delta = lerp(yaw_delta, actual_yaw_speed * control_data.yaw, .2)
 	yaw_delta = _floorLowValue(yaw_delta)
-	roll_delta = lerp(roll_delta, actual_roll_speed * control_data[ShipControl.ROLL], .2)
+	roll_delta = lerp(roll_delta, actual_roll_speed * control_data.roll, .2)
 	roll_delta = _floorLowValue(roll_delta)
-	var afterburner = control_data[ShipControl.AFTERBURNER]
+	var afterburner = control_data.afterburner
 	if afterburner:
 		target_velocity.z = afterburner_speed
 	else:
-		target_velocity.z = control_data[ShipControl.THROTTLE] * max_speed
+		target_velocity.z = control_data.throttle * max_speed
 
 
 func _physics_process(delta):
@@ -147,9 +156,9 @@ func _physics_process(delta):
 	velocity = velocity.rotated(Z_AXIS, -roll_delta * delta)
 
 #	var current_acceleration = acceleration
-#	if control_data[ShipControl.AFTERBURNER]:
+#	if control_data.afterburner:
 #		current_acceleration = afterburner_acceleration
-	if not control_data[ShipControl.GLIDE]:
+	if not control_data.glide:
 		velocity = lerp(velocity, target_velocity, .03)
 #		velocity = velocity.move_toward(target_velocity, current_acceleration) # Unstable branch feature
 	if target_velocity.x == 0:
