@@ -84,3 +84,4 @@ keep_aspect = 0
 fov = 100.0
 far = 1000.0
 speed = 7.0
+[connection signal="weapon_fired" from="Player" to="." method="_on_Player_weapon_fired"]

@@ -7,7 +7,6 @@ onready var cockpitCamera: Camera = $Player/Camera
 onready var chaseCamera: InterpolatedCamera = $ChaseCamera
 onready var chaseView = false
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
 	player.controller = PlayerPilot.new()
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
@@ -22,20 +21,18 @@ func _ready():
 	cockpitCamera.far = 1000
 	player.visible = false
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	# Put skybox at camera position
-#	var sbTransform = camera.get_global_transform()
-#	$Skybox.transform.origin = sbTransform.origin
-
-	if Input.is_action_just_pressed("toggle_chase"):
-		toggle_chasecam()
-
-func toggle_chasecam():
-	if chaseView:
-		cockpitCamera.make_current()
-	else:
+	if Input.is_action_just_pressed("camera_chase"):
 		chaseCamera.make_current()
+		player.visible = true
+	elif Input.is_action_just_pressed("camera_front"):
+		cockpitCamera.make_current()
+		player.visible = false
 
-	chaseView = not chaseView
-	player.visible = not player.visible
+func _on_Player_weapon_fired(shooter: KinematicBody, transform: Transform, weapon_scene: PackedScene):
+	print("bullet global transform: ", transform)
+	var bullet = weapon_scene.instance()
+	bullet.shooter = shooter
+	bullet.global_transform = transform
+	bullet.velocity = transform.basis.xform(Vector3.BACK * bullet.speed)
+	add_child(bullet)

@@ -75,19 +75,20 @@ var control_data: Dictionary = {
 
 # Physics
 var velocity: Vector3 = Vector3(0,0,0)
-var pitch_delta: float = 0
-var yaw_delta: float = 0
-var roll_delta: float = 0
+var pitch_delta: float = 0 setget _set_pitch_delta
+var yaw_delta: float = 0 setget _set_yaw_delta
+var roll_delta: float = 0 setget _set_roll_delta
 onready var actual_pitch_speed = deg2rad(pitch_speed)
 onready var actual_yaw_speed = deg2rad(yaw_speed)
 onready var actual_roll_speed = deg2rad(roll_speed)
 
 # Equipment
 var shield_unit = ShieldUnit.new([50, 50])
-#var guns = 0  # Change to GunUnit class
-#var missiles = 0  # Change to MissileUnit class
-#var activeSpecial = 0  # Special ability, such as cloaking device
+onready var guns = $Guns.get_children()  # Change to GunUnit class
+onready var missiles = $Missiles.get_children()  # Change to MissileUnit class
+#var active_special = 0  # Special ability, such as cloaking device
 var shield_show_time = 0 setget set_shield_time
+signal weapon_fired
 
 # Constants
 const X_AXIS = Vector3(1,0,0)
@@ -110,6 +111,19 @@ func set_shield_time(shield_time: float):
 				shield_mtl.set_shader_param("showTime", shield_time)
 		else:
 			shield_visual.visible = false
+
+
+# Override these if the ship has thrust pods that rotate when the ship turns
+func _set_pitch_delta(pitch_delta: float):
+	pass
+
+
+func _set_yaw_delta(yaw_delta: float):
+	pass
+
+
+func _set_roll_delta(roll_delta: float):
+	pass
 
 
 func _receive_damage(direction: Vector3, position: Vector3, damage: int):
@@ -139,11 +153,24 @@ func _process(delta):
 	yaw_delta = _floorLowValue(yaw_delta)
 	roll_delta = lerp(roll_delta, actual_roll_speed * control_data.roll, .2)
 	roll_delta = _floorLowValue(roll_delta)
-	var afterburner = control_data.afterburner
-	if afterburner:
+
+	if control_data.afterburner:
 		target_velocity.z = afterburner_speed
 	else:
 		target_velocity.z = control_data.throttle * max_speed
+
+	if control_data.fire_gun:
+		for gun in guns:
+			if gun.has_method("fire") and gun.fire():
+				emit_signal("weapon_fired",
+					self,
+					gun.global_transform,
+					gun.bullet_scene)
+
+#	if control_data.fire_missile:
+#		for gun in missiles:
+#			if gun.has_method("fire") and gun.fire():
+#				emit_signal("weapon_fired", self, gun.global_transform, gun.bullet_scene)
 
 
 func _physics_process(delta):
@@ -155,6 +182,7 @@ func _physics_process(delta):
 	velocity = velocity.rotated(Y_AXIS, -yaw_delta * delta)
 	velocity = velocity.rotated(Z_AXIS, -roll_delta * delta)
 
+#	TODO: acceleration
 #	var current_acceleration = acceleration
 #	if control_data.afterburner:
 #		current_acceleration = afterburner_acceleration
@@ -167,10 +195,12 @@ func _physics_process(delta):
 		velocity.y = _floorLowValue(velocity.y)
 	if target_velocity.z == 0:
 		velocity.z = _floorLowValue(velocity.z)
-	var physvelocity = transform.basis.xform(velocity)
+	var physvelocity = global_transform.basis.xform(velocity)
 	var collision = move_and_collide(physvelocity * delta)
 	if collision != null:
 		var obj = collision.collider
+		if obj.get("shooter") and obj.shooter == self:
+			return
 		var norm = transform.basis.xform_inv(collision.normal)
 		var pos = transform.basis.xform_inv(collision.position)
 		# Bounce
