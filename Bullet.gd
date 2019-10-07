@@ -1,4 +1,5 @@
 extends KinematicBody
+# Bullet - moves around, runs in to things, and hurts them
 
 var velocity: Vector3
 var lifetime: float = 2.0

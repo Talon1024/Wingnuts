@@ -1,6 +1,7 @@
 extends Spatial
 
 const PlayerPilot = preload("res://PlayerPilot.gd")
+const Ship = preload("res://Ship.gd")
 
 onready var player = $Player
 onready var cockpitCamera: Camera = $Player/Camera
@@ -29,9 +30,10 @@ func _process(delta):
 		cockpitCamera.make_current()
 		player.visible = false
 
-func _on_Player_weapon_fired(shooter: KinematicBody, transform: Transform, weapon_scene: PackedScene):
+func _on_Player_weapon_fired(shooter: Ship, transform: Transform, weapon_scene: PackedScene):
 	var bullet = weapon_scene.instance()
 	bullet.add_collision_exception_with(shooter)
 	bullet.global_transform = transform
-	bullet.velocity = transform.basis.xform(Vector3.FORWARD * bullet.speed)
+	var speed = bullet.speed + shooter.velocity.length()
+	bullet.velocity = transform.basis.xform(Vector3.FORWARD * speed)
 	add_child(bullet)

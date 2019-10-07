@@ -79,7 +79,7 @@ transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2.2177
 transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 2.17629, 0, -4.22339 )
 
 [node name="CockpitPosition" type="Position3D" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.412, 5.17 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.412, -5.17 )
 
 [node name="RayCast" type="RayCast" parent="."]
 cast_to = Vector3( 0, 0, -20 )

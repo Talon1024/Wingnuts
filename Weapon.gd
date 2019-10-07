@@ -1,4 +1,5 @@
 extends Spatial
+# Weapon - controls firing "bullets"
 
 export(PackedScene) var bullet_scene
 
