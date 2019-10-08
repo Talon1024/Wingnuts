@@ -6,10 +6,10 @@ export(PackedScene) var bullet_scene
 var refire_delay := 0.0
 var armed: bool = true
 
-func arm(arm: bool):
+func _arm(arm: bool):
 	armed = arm
 
-func fire() -> bool:
+func _fire() -> bool:
 	if armed and refire_delay == 0.0:
 		var bullet = bullet_scene.instance()
 		if bullet.has_method("get_refire"):

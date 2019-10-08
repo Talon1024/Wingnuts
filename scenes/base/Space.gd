@@ -1,7 +1,7 @@
 extends Spatial
 
-const PlayerPilot = preload("res://PlayerPilot.gd")
-const Ship = preload("res://Ship.gd")
+const PlayerPilot = preload("res://scenes/base/PlayerPilot.gd")
+const Ship = preload("res://scenes/base/Ship.gd")
 
 onready var player = $Player
 onready var cockpitCamera: Camera = $Player/Camera

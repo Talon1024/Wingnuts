@@ -58,7 +58,7 @@ export var roll_speed = 90
 onready var health = base_health
 
 # Control
-const Pilot = preload("res://Pilot.gd")
+const Pilot = preload("res://scenes/base/Pilot.gd")
 var target_velocity: Vector3 = Vector3(0,0,0)
 var controller: Pilot = null
 #var control_data: Array = [0, 0, 0, 0, false, false, false, false]  # See Pilot.ShipControl
@@ -161,7 +161,7 @@ func _process(delta):
 
 	if control_data.fire_gun:
 		for gun in guns:
-			if gun.has_method("fire") and gun.fire():
+			if gun.has_method("_fire") and gun._fire():
 				emit_signal("weapon_fired",
 					self,
 					gun.global_transform,
@@ -169,7 +169,7 @@ func _process(delta):
 
 #	if control_data.fire_missile:
 #		for gun in missiles:
-#			if gun.has_method("fire") and gun.fire():
+#			if gun.has_method("_fire") and gun._fire():
 #				emit_signal("weapon_fired", self, gun.global_transform, gun.bullet_scene)
 
 

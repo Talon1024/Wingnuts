@@ -1,6 +1,6 @@
 [gd_scene load_steps=16 format=2]
 
-[ext_resource path="res://Ship.gd" type="Script" id=1]
+[ext_resource path="res://scenes/base/Ship.gd" type="Script" id=1]
 [ext_resource path="res://assets/Epee/Epee.obj" type="ArrayMesh" id=2]
 [ext_resource path="res://assets/Epee/EpeePBR-albedo.png" type="Texture" id=3]
 [ext_resource path="res://assets/Epee/Epee2-clearcoat.png" type="Texture" id=4]
@@ -8,9 +8,11 @@
 [ext_resource path="res://assets/Epee/EpeePBR-metal.png" type="Texture" id=6]
 [ext_resource path="res://assets/Epee/EpeePBR-normal.png" type="Texture" id=7]
 [ext_resource path="res://assets/Epee/EpeePBR-rough.png" type="Texture" id=8]
-[ext_resource path="res://Weapon.tscn" type="PackedScene" id=9]
+[ext_resource path="res://scenes/base/Weapon.tscn" type="PackedScene" id=9]
 [ext_resource path="res://assets/Epee/Epeeshield.obj" type="ArrayMesh" id=10]
 [ext_resource path="res://assets/shield.shader" type="Shader" id=11]
+
+
 
 [sub_resource type="BoxShape" id=1]
 extents = Vector3( 4.5, 2.4, 3.8 )

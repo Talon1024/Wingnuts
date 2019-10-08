@@ -1,7 +1,8 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://Pause.gd" type="Script" id=1]
+[ext_resource path="res://scenes/base/Pause.gd" type="Script" id=1]
 [ext_resource path="res://assets/vendor/maven-pro/wingmavenpro.tres" type="DynamicFont" id=2]
+
 
 [node name="Pause" type="Panel"]
 pause_mode = 2

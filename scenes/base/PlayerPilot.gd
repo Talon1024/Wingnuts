@@ -1,4 +1,4 @@
-extends "res://Pilot.gd"
+extends "res://scenes/base/Pilot.gd"
 
 func handle_key_pair(pos: String, neg: String):
 	if Input.is_action_pressed(pos):
