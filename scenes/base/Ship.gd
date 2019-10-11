@@ -1,5 +1,22 @@
 # Generic space fighter/bomber class
 extends KinematicBody
+# WARNING: Do NOT instance Ship.tscn directly. It is meant to be inherited and
+# used as a base class for other ships.
+#
+# Ship subclasses should have the following nodes:
+#
+# - One or more Weapon nodes, as children of the "Guns" node, which will fire
+#   when the pilot sets control_data.fire_gun to true
+#
+# - One or more Weapon nodes, as children of the "Missiles" node, which will
+#   fire when the pilot sets control_data.fire_missile to true
+#
+# - A MeshInstance node named "ShieldVisual", which will flash when the shield
+#   takes damage
+#
+# - For player-flyable ships, two Position3D nodes named "CockpitPosition" and
+#   "ChasePosition", which are the positions the cockpit and chase cameras will
+#   follow.
 
 class ShieldUnit:
 	var sections = []

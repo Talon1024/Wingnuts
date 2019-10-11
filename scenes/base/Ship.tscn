@@ -9,3 +9,7 @@ script = ExtResource( 1 )
 
 [node name="RayCast" type="RayCast" parent="."]
 cast_to = Vector3( 0, 0, -20 )
+
+[node name="Guns" type="Spatial" parent="."]
+
+[node name="Missiles" type="Spatial" parent="."]
