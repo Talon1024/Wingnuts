@@ -8,18 +8,24 @@ onready var cockpitCamera: Camera = $Player/Camera
 onready var chaseCamera: InterpolatedCamera = $ChaseCamera
 onready var chaseView = false
 
+func _setup_camera(cam: Camera, target: Node = null):
+	if cam.has_method("set_target"):
+		# It's an InterpolatedCamera
+		cam.set_target(target)
+		cam.enabled = true
+	cam.transform = target.transform
+	cam.keep_aspect = Camera.KEEP_WIDTH
+	cam.far = 1000
+	cam.fov = 100  # Get from settings
+
 func _ready():
 	player.controller = PlayerPilot.new()
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	# Set up chase camera
-	chaseCamera.set_target($Player/ChasePosition)
-	chaseCamera.transform = $Player/ChasePosition.transform
-	chaseCamera.enabled = true
-	chaseCamera.far = 1000
+	_setup_camera(chaseCamera, $Player/ChasePosition)
 	# Set up cockpit camera and use it as the default
-	cockpitCamera.transform = $Player/CockpitPosition.transform
+	_setup_camera(cockpitCamera, $Player/CockpitPosition)
 	cockpitCamera.make_current()
-	cockpitCamera.far = 1000
 	player.visible = false
 
 func _process(delta):

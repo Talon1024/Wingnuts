@@ -1,7 +1,7 @@
 [gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://scenes/base/Space.gd" type="Script" id=1]
-[ext_resource path="res://scenes/base/Ship.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/ships/Epee.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/planet_physmat.tres" type="PhysicsMaterial" id=3]
 [ext_resource path="res://scenes/UI/HUD.tscn" type="PackedScene" id=4]
 [ext_resource path="res://scenes/base/Pause.tscn" type="PackedScene" id=5]
@@ -10,7 +10,6 @@
 [ext_resource path="res://scenes/base/SpaceEnvironment.gd" type="Script" id=8]
 [ext_resource path="res://assets/vendor/ulukai/corona_equirectangular.png" type="Texture" id=9]
 [ext_resource path="res://assets/music/OutThere.ogg" type="AudioStream" id=10]
-
 
 [sub_resource type="SphereShape" id=1]
 radius = 7.0
