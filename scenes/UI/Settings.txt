@@ -1,0 +1,32 @@
+Display
+=======
+Resolution: 1280x1024, 1024x768, 1920x1080, etc.
+Window: Window, Borderless Window, Fullscreen
+
+Graphics
+========
+Bloom: Light, Default, Heavy
+Tonemap: Aces, Filmic, etc.
+SS Reflections: Y/N
+SSAO: Y/N
+Shadows: Y/N
+FOV: 80 - 110
+
+Controls
+========
+Pitch up
+Pitch down
+Turn left
+Turn right
+Roll left
+Roll right
+Fire gun(s)
+Fire missile(s)
+Afterburner
+Accelerate
+Decelerate
+Full throttle
+Zero throttle
+Cockpit view
+Chase view
+Outside view
