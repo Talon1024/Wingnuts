@@ -5,6 +5,10 @@ extends KinematicBody
 #
 # Ship subclasses should have the following nodes:
 #
+# - One or more CollisionShape nodes. Ship is a subclass of KinematicBody, and
+#   these "Hitboxes" are required by KinematicBody in order for collision
+#   detection to work properly.
+#
 # - One or more Weapon nodes, as children of the "Guns" node, which will fire
 #   when the pilot sets control_data.fire_gun to true
 #
