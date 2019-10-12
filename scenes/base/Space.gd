@@ -6,7 +6,6 @@ const Ship = preload("res://scenes/base/Ship.gd")
 onready var player = $Player
 onready var cockpitCamera: Camera = $Player/Camera
 onready var chaseCamera: InterpolatedCamera = $ChaseCamera
-onready var chaseView = false
 
 func _setup_camera(cam: Camera, target: Node = null):
 	if cam.has_method("set_target"):
@@ -40,6 +39,8 @@ func _on_Player_weapon_fired(shooter: Ship, transform: Transform, weapon_scene: 
 	var bullet = weapon_scene.instance()
 	bullet.add_collision_exception_with(shooter)
 	bullet.global_transform = transform
-	var speed = bullet.speed + shooter.velocity.length()
+	var speed = bullet.speed
+	if bullet.add_speed:
+		speed += shooter.velocity.length()
 	bullet.velocity = transform.basis.xform(Vector3.FORWARD * speed)
 	add_child(bullet)

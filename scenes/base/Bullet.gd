@@ -1,11 +1,18 @@
 extends KinematicBody
-# Bullet - moves around, runs in to things, and hurts them
+# Bullet - moves around, runs in to things, and hurts them.
+# NOTE: This is not meant to be used directly. Individual weapon types should
+# be new scenes inheriting from Bullet.tscn.
+#
+# The only thing individual weapon types really need is a CollisionShape.
+# Everything else is up to the individual weapon class. Note that bullets are,
+# by default, exempt from colliding with their respective shooters
 
 var velocity: Vector3
 var lifetime: float = 2.0
 var refire: float = 1.0
 var speed: float = 6.0
 var add_speed: bool = true
+# Used for ITTS calculation
 onready var distance: float = lifetime * velocity.length()
 
 func _process(delta):
@@ -15,8 +22,11 @@ func _process(delta):
 		return
 	var collision = move_and_collide(velocity)
 
-func get_damage() -> int:
+# Called by things that can be damaged to retrieve the amount of damage to do
+func _get_damage() -> int:
 	return 7;
 
-func get_refire() -> float:
+# Called by weapons to see how long it should take before the weapon can be
+# fired again
+func _get_refire() -> float:
 	return refire
