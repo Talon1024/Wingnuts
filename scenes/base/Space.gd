@@ -7,6 +7,7 @@ onready var player = $Player
 onready var cockpitCamera: Camera = $Player/Camera
 onready var chaseCamera: InterpolatedCamera = $ChaseCamera
 
+
 func _setup_camera(cam: Camera, target: Node = null):
 	if cam.has_method("set_target"):
 		# It's an InterpolatedCamera
@@ -16,6 +17,7 @@ func _setup_camera(cam: Camera, target: Node = null):
 	cam.keep_aspect = Camera.KEEP_WIDTH
 	cam.far = 1000
 	cam.fov = 100  # Get from settings
+
 
 func _ready():
 	player.controller = PlayerPilot.new()
@@ -27,6 +29,7 @@ func _ready():
 	cockpitCamera.make_current()
 	player.visible = false
 
+
 func _process(delta):
 	if Input.is_action_just_pressed("camera_chase"):
 		chaseCamera.make_current()
@@ -34,6 +37,7 @@ func _process(delta):
 	elif Input.is_action_just_pressed("camera_front"):
 		cockpitCamera.make_current()
 		player.visible = false
+
 
 func _on_Player_weapon_fired(shooter: Ship, transform: Transform, weapon_scene: PackedScene):
 	var bullet = weapon_scene.instance()
@@ -43,4 +47,5 @@ func _on_Player_weapon_fired(shooter: Ship, transform: Transform, weapon_scene: 
 	if bullet.add_speed:
 		speed += shooter.velocity.length()
 	bullet.velocity = transform.basis.xform(Vector3.FORWARD * speed)
+	print("bullet speed: ", bullet.velocity.length())
 	add_child(bullet)

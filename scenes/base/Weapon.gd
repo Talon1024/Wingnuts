@@ -12,9 +12,10 @@ func _arm(arm: bool):
 func _fire() -> bool:
 	if armed and refire_delay == 0.0:
 		var bullet = bullet_scene.instance()
-		if bullet.has_method("get_refire"):
-			refire_delay = bullet.get_refire()
-			return true
+		if bullet.has_method("_get_refire"):
+			refire_delay = bullet._get_refire()
+		bullet.free()
+		return true
 	return false
 
 func _process(delta):
