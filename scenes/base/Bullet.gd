@@ -19,8 +19,9 @@ func _process(delta):
 	lifetime -= delta
 	if lifetime < 0:
 		queue_free()
-		return
-	var collision = move_and_collide(velocity)
+
+func _physics_process(delta):
+	var collision = move_and_collide(velocity * delta)
 
 # Called by things that can be damaged to retrieve the amount of damage to do
 func _get_damage() -> int:

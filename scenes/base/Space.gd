@@ -8,6 +8,11 @@ onready var cockpitCamera: Camera = $Player/Camera
 onready var chaseCamera: InterpolatedCamera = $ChaseCamera
 
 
+func _setup_env():
+	# Setup environment according to user's settings
+	var environment = $SpaceEnvironment
+
+
 func _setup_camera(cam: Camera, target: Node = null):
 	if cam.has_method("set_target"):
 		# It's an InterpolatedCamera
@@ -48,4 +53,4 @@ func _on_Player_weapon_fired(shooter: Ship, transform: Transform, weapon_scene: 
 		speed += shooter.velocity.length()
 	bullet.velocity = transform.basis.xform(Vector3.FORWARD * speed)
 	print("bullet speed: ", bullet.velocity.length())
-	add_child(bullet)
+	self.add_child(bullet)
