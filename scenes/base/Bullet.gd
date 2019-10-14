@@ -10,22 +10,26 @@ extends KinematicBody
 var velocity: Vector3
 var lifetime: float = 2.0
 var refire: float = 1.0
-var speed: float = 6.0
+var speed: float = 200.0
 var add_speed: bool = true
 # Used for ITTS calculation
 onready var distance: float = lifetime * velocity.length()
+
 
 func _process(delta):
 	lifetime -= delta
 	if lifetime < 0:
 		queue_free()
 
+
 func _physics_process(delta):
 	var collision = move_and_collide(velocity * delta)
+
 
 # Called by things that can be damaged to retrieve the amount of damage to do
 func _get_damage() -> int:
 	return 7;
+
 
 # Called by weapons to see how long it should take before the weapon can be
 # fired again

@@ -52,5 +52,4 @@ func _on_Player_weapon_fired(shooter: Ship, transform: Transform, weapon_scene: 
 	if bullet.add_speed:
 		speed += shooter.velocity.length()
 	bullet.velocity = transform.basis.xform(Vector3.FORWARD * speed)
-	print("bullet speed: ", bullet.velocity.length())
 	self.add_child(bullet)

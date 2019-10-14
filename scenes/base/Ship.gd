@@ -82,7 +82,6 @@ onready var health = base_health
 const Pilot = preload("res://scenes/base/Pilot.gd")
 var target_velocity: Vector3 = Vector3(0,0,0)
 var controller: Pilot = null
-#var control_data: Array = [0, 0, 0, 0, false, false, false, false]  # See Pilot.ShipControl
 var control_data: Dictionary = {
 	"yaw": 0.0,
 	"pitch": 0.0,
@@ -93,6 +92,9 @@ var control_data: Dictionary = {
 	"fire_gun": false,
 	"fire_missile": false,
 }
+var unfire_gun: bool = false
+var unfire_missile: bool = false
+signal weapon_fired
 
 # Physics
 var velocity: Vector3 = Vector3(0,0,0)
@@ -109,7 +111,7 @@ onready var guns = $Guns.get_children()  # Change to GunUnit class
 onready var missiles = $Missiles.get_children()  # Change to MissileUnit class
 #var active_special = 0  # Special ability, such as cloaking device
 var shield_show_time = 0 setget set_shield_time
-signal weapon_fired
+
 
 # Constants
 const X_AXIS = Vector3(1,0,0)
@@ -181,17 +183,29 @@ func _process(delta):
 		target_velocity.z = -control_data.throttle * max_speed
 
 	if control_data.fire_gun:
-		for gun in guns:
-			if gun.has_method("_fire") and gun._fire():
+		unfire_gun = true
+		_handle_firing(guns, "_fire")
+	else:
+		if unfire_gun:
+			_handle_firing(guns, "_unfire")
+			unfire_gun = false
+
+	if control_data.fire_missile:
+		unfire_missile = true
+		_handle_firing(missiles, "_fire")
+	else:
+		if unfire_missile:
+			_handle_firing(missiles, "_unfire")
+
+
+# Default weapons firing/"unfiring" logic
+func _handle_firing(array, method):
+	for gun in array:
+			if gun.has_method(method) and gun.call(method):
 				emit_signal("weapon_fired",
 					self,
 					gun.global_transform,
 					gun.bullet_scene)
-
-#	if control_data.fire_missile:
-#		for gun in missiles:
-#			if gun.has_method("_fire") and gun._fire():
-#				emit_signal("weapon_fired", self, gun.global_transform, gun.bullet_scene)
 
 
 func _physics_process(delta):
