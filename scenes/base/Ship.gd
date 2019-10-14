@@ -196,6 +196,7 @@ func _process(delta):
 	else:
 		if unfire_missile:
 			_handle_firing(missiles, "_unfire")
+			unfire_missile = false
 
 
 # Default weapons firing/"unfiring" logic
