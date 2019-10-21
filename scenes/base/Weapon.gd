@@ -2,9 +2,18 @@ extends Spatial
 # Weapon - controls firing "bullets"
 
 export(PackedScene) var bullet_scene
+export(Mesh) var weapon_model
 
 var refire_delay := 0.0
 var armed: bool = true
+
+
+# Add the 3D model for the weapon as a child
+func _ready():
+	if weapon_model:
+		var model = MeshInstance.new()
+		model.mesh = weapon_model
+		add_child(model)
 
 
 # Arms the weapon

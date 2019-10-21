@@ -62,23 +62,26 @@ class ShieldUnit:
 		else:
 			return damage
 
-# Resources
-onready var shield_visual = $ShieldVisual
 
-# Stats
-export var base_health = 100
-export var max_speed = 25
-export var afterburner_speed = 100
-#export var afterburnerAcceleration = 120
-#export var acceleration = 30
-#export var shieldLevel = 1  # Shield capacitor level
-export var pitch_speed = 90  # DPS
-export var yaw_speed = 90
-export var roll_speed = 90
-#export var mass = 100  # Used to determine damage and knockback
-onready var health = base_health
+# ========== Resources ==========
+onready var shield_visual: Node = $ShieldVisual
 
-# Control
+
+# ========== Stats ==========
+export var base_health: int = 100
+export var max_speed: float = 25
+export var afterburner_speed: float = 100
+#export var afterburnerAcceleration: float = 120
+#export var acceleration: float = 30
+#export var shieldLevel: int = 1  # Shield capacitor level
+export var pitch_speed: float = 90  # DPS
+export var yaw_speed: float = 90
+export var roll_speed: float = 90
+#export var mass: float = 100  # Used to determine damage and knockback
+onready var health: int = base_health
+
+
+# ========== Control ==========
 const Pilot = preload("res://scenes/base/Pilot.gd")
 var target_velocity: Vector3 = Vector3(0,0,0)
 var controller: Pilot = null
@@ -96,27 +99,29 @@ var unfire_gun: bool = false
 var unfire_missile: bool = false
 signal weapon_fired
 
-# Physics
+
+# ========== Physics ==========
 var velocity: Vector3 = Vector3(0,0,0)
 var pitch_delta: float = 0 setget _set_pitch_delta
 var yaw_delta: float = 0 setget _set_yaw_delta
 var roll_delta: float = 0 setget _set_roll_delta
-onready var actual_pitch_speed = deg2rad(pitch_speed)
-onready var actual_yaw_speed = deg2rad(yaw_speed)
-onready var actual_roll_speed = deg2rad(roll_speed)
+onready var actual_pitch_speed: float = deg2rad(pitch_speed)
+onready var actual_yaw_speed: float = deg2rad(yaw_speed)
+onready var actual_roll_speed: float = deg2rad(roll_speed)
 
-# Equipment
-var shield_unit = ShieldUnit.new([50, 50])
+
+# ========== Equipment ==========
+var shield_unit: ShieldUnit = ShieldUnit.new([50, 50])
 onready var guns = $Guns.get_children()  # Change to GunUnit class
 onready var missiles = $Missiles.get_children()  # Change to MissileUnit class
 #var active_special = 0  # Special ability, such as cloaking device
-var shield_show_time = 0 setget set_shield_time
+var shield_show_time: float = 0 setget set_shield_time
 
 
-# Constants
-const X_AXIS = Vector3(1,0,0)
-const Y_AXIS = Vector3(0,1,0)
-const Z_AXIS = Vector3(0,0,1)
+# ========== Constants ==========
+const X_AXIS: Vector3 = Vector3(1,0,0)
+const Y_AXIS: Vector3 = Vector3(0,1,0)
+const Z_AXIS: Vector3 = Vector3(0,0,1)
 
 
 func _floorLowValue(value, threshold = .1):
@@ -214,6 +219,7 @@ func _physics_process(delta):
 	rotate_object_local(Y_AXIS, yaw_delta * delta)
 	rotate_object_local(Z_AXIS, roll_delta * delta)
 
+	# Semi-newtonian physics
 	velocity = velocity.rotated(X_AXIS, -pitch_delta * delta)
 	velocity = velocity.rotated(Y_AXIS, -yaw_delta * delta)
 	velocity = velocity.rotated(Z_AXIS, -roll_delta * delta)

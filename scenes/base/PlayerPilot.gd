@@ -1,6 +1,8 @@
 extends "res://scenes/base/Pilot.gd"
 
-func handle_key_pair(pos: String, neg: String):
+# Return 1 if an action is pressed, return -1 if another action is pressed,
+# or 0 if neither is pressed.
+func handle_key_pair(pos: String, neg: String) -> float:
 	if Input.is_action_pressed(pos):
 		return 1.0
 	elif Input.is_action_pressed(neg):
@@ -8,6 +10,7 @@ func handle_key_pair(pos: String, neg: String):
 	else:
 		return 0.0
 
+# Handle player's inputs
 func think(delta, controls: Dictionary) -> Dictionary:
 	controls.pitch = handle_key_pair("pitch_up", "pitch_down")
 	controls.yaw = handle_key_pair("turn_left", "turn_right")
