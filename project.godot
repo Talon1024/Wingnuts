@@ -8,9 +8,14 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "Node",
+"class": "PilotPlayer",
+"language": "GDScript",
+"path": "res://scenes/pilots/PlayerPilot.gd"
+} ]
 _global_script_class_icons={
-
+"PilotPlayer": "res://editor/icons/pilot.png"
 }
 
 [application]
@@ -21,9 +26,8 @@ config/icon="res://icon.png"
 
 [display]
 
-window/size/width=1920
-window/size/height=1080
-window/size/fullscreen=true
+window/size/width=1280
+window/size/height=720
 window/dpi/allow_hidpi=true
 
 [input]

@@ -1,4 +1,5 @@
-extends "res://scenes/base/Pilot.gd"
+extends "res://scenes/pilots/Pilot.gd"
+class_name PilotPlayer, "res://editor/icons/pilot.png"
 
 # Return 1 if an action is pressed, return -1 if another action is pressed,
 # or 0 if neither is pressed.

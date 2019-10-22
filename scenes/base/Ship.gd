@@ -82,9 +82,8 @@ onready var health: int = base_health
 
 
 # ========== Control ==========
-const Pilot = preload("res://scenes/base/Pilot.gd")
 var target_velocity: Vector3 = Vector3(0,0,0)
-var controller: Pilot = null
+onready var pilot = $Pilot
 var control_data: Dictionary = {
 	"yaw": 0.0,
 	"pitch": 0.0,
@@ -172,8 +171,8 @@ func _receive_damage(direction: Vector3, position: Vector3, damage: int):
 
 
 func _process(delta):
-	if controller is Pilot:
-		control_data = controller.think(delta, control_data)
+	if pilot and pilot.has_method("think"):
+		control_data = pilot.think(delta, control_data)
 
 	pitch_delta = lerp(pitch_delta, actual_pitch_speed * control_data.pitch, .2)
 	pitch_delta = _floorLowValue(pitch_delta)

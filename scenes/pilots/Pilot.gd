@@ -1,4 +1,4 @@
-extends Object
+extends Node
 # Base class for pilots, which control ships
 
 # This function is called during _process(). It modifies the ship controls,

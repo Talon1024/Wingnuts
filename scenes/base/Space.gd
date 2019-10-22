@@ -1,6 +1,5 @@
 extends Spatial
 
-const PlayerPilot = preload("res://scenes/base/PlayerPilot.gd")
 const Ship = preload("res://scenes/base/Ship.gd")
 const SpaceEnvironment = preload("res://scenes/base/SpaceEnvironment.gd")
 
@@ -27,7 +26,6 @@ func _setup_camera(cam: Camera, target: Node = null):
 
 
 func _ready():
-	player.controller = PlayerPilot.new()
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	# Set up chase camera
 	_setup_camera(chaseCamera, $Player/ChasePosition)
