@@ -1,16 +1,15 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://scenes/base/Space.gd" type="Script" id=1]
 [ext_resource path="res://scenes/ships/Epee.tscn" type="PackedScene" id=2]
-[ext_resource path="res://scenes/pilots/PlayerPilot.gd" type="Script" id=3]
-[ext_resource path="res://assets/planet_physmat.tres" type="PhysicsMaterial" id=4]
-[ext_resource path="res://scenes/UI/HUD.tscn" type="PackedScene" id=5]
-[ext_resource path="res://scenes/base/Pause.tscn" type="PackedScene" id=6]
-[ext_resource path="res://scenes/misc/Fullscreen.tscn" type="PackedScene" id=7]
-[ext_resource path="res://assets/env_space.tres" type="Environment" id=8]
-[ext_resource path="res://scenes/base/SpaceEnvironment.gd" type="Script" id=9]
-[ext_resource path="res://assets/vendor/ulukai/corona_equirectangular.png" type="Texture" id=10]
-[ext_resource path="res://assets/music/OutThere.ogg" type="AudioStream" id=11]
+[ext_resource path="res://assets/planet_physmat.tres" type="PhysicsMaterial" id=3]
+[ext_resource path="res://scenes/UI/HUD.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/base/Pause.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scenes/misc/Fullscreen.tscn" type="PackedScene" id=6]
+[ext_resource path="res://assets/env_space.tres" type="Environment" id=7]
+[ext_resource path="res://scenes/base/SpaceEnvironment.gd" type="Script" id=8]
+[ext_resource path="res://assets/vendor/ulukai/corona_equirectangular.png" type="Texture" id=9]
+[ext_resource path="res://assets/music/OutThere.ogg" type="AudioStream" id=10]
 
 [sub_resource type="SphereShape" id=1]
 radius = 7.0
@@ -35,9 +34,6 @@ far = 1000.0
 
 [node name="OutsideCamera" type="Camera" parent="Player"]
 
-[node name="Pilot" type="Node" parent="Player"]
-script = ExtResource( 3 )
-
 [node name="SunLight" type="DirectionalLight" parent="."]
 transform = Transform( 0.839219, 0.26903, -0.472582, 0.235507, 0.60351, 0.761783, 0.49015, -0.750599, 0.443118, -8.34762, 4.34677, -2.00028 )
 light_bake_mode = 0
@@ -46,7 +42,7 @@ directional_shadow_blend_splits = true
 
 [node name="PlanetA" type="StaticBody" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -36.5356, 39.6187, 35.6694 )
-physics_material_override = ExtResource( 4 )
+physics_material_override = ExtResource( 3 )
 
 [node name="CollisionShape" type="CollisionShape" parent="PlanetA"]
 shape = SubResource( 1 )
@@ -56,11 +52,11 @@ transform = Transform( 7, 0, 0, 0, 7, 0, 0, 0, 7, 0, 0, 0 )
 mesh = SubResource( 2 )
 material/0 = null
 
-[node name="HUD" parent="." instance=ExtResource( 5 )]
+[node name="HUD" parent="." instance=ExtResource( 4 )]
 
 [node name="PlanetBox" type="StaticBody" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 43.1047, 0, -13.0719 )
-physics_material_override = ExtResource( 4 )
+physics_material_override = ExtResource( 3 )
 
 [node name="MeshInstance" type="MeshInstance" parent="PlanetBox"]
 transform = Transform( 16, 0, 0, 0, 16, 0, 0, 0, 16, 0, 0, 0 )
@@ -70,18 +66,18 @@ material/0 = null
 [node name="CollisionShape" type="CollisionShape" parent="PlanetBox"]
 shape = SubResource( 4 )
 
-[node name="Pause" parent="." instance=ExtResource( 6 )]
+[node name="Pause" parent="." instance=ExtResource( 5 )]
 visible = false
 
-[node name="Misc controls" parent="." instance=ExtResource( 7 )]
+[node name="Misc controls" parent="." instance=ExtResource( 6 )]
 
 [node name="SpaceEnvironment" type="WorldEnvironment" parent="."]
-environment = ExtResource( 8 )
-script = ExtResource( 9 )
-background_panorama_image = ExtResource( 10 )
+environment = ExtResource( 7 )
+script = ExtResource( 8 )
+background_panorama_image = ExtResource( 9 )
 
 [node name="BGMusic" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 11 )
+stream = ExtResource( 10 )
 volume_db = 5.0
 autoplay = true
 

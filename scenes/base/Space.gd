@@ -2,7 +2,7 @@ extends Spatial
 
 const Ship = preload("res://scenes/base/Ship.gd")
 const SpaceEnvironment = preload("res://scenes/base/SpaceEnvironment.gd")
-
+const PlayerPilot = preload("res://scenes/pilots/PlayerPilot.gd")
 
 onready var player: Ship = $Player
 onready var cockpitCamera: Camera = $Player/Camera
@@ -33,6 +33,7 @@ func _ready():
 	_setup_camera(cockpitCamera, $Player/CockpitPosition)
 	cockpitCamera.make_current()
 	player.visible = false
+	$Player.add_child(PlayerPilot.new())
 
 
 func _process(delta):

@@ -79,6 +79,9 @@ export var yaw_speed: float = 90
 export var roll_speed: float = 90
 #export var mass: float = 100  # Used to determine damage and knockback
 onready var health: int = base_health
+export var on_radar: bool = true
+var power: int = 20 # Amount of energy available for weapons
+var power_regen: int = 2
 
 
 # ========== Control ==========
@@ -213,6 +216,11 @@ func _handle_firing(array, method):
 				gun.bullet_scene)
 
 
+# Whether the ship should be visible on the player's radar
+func _visible_on_radar() -> bool:
+	return on_radar
+
+
 func _physics_process(delta):
 	rotate_object_local(X_AXIS, pitch_delta * delta)
 	rotate_object_local(Y_AXIS, yaw_delta * delta)
@@ -252,3 +260,9 @@ func _physics_process(delta):
 		if obj.has_method("get_damage"):
 			damage = obj.get_damage()
 		_receive_damage(norm, pos, damage)
+
+
+# Pilots are nodes now
+func set_pilot(pilot: Node):
+	if pilot.has_method("think"):
+		self.pilot = pilot
