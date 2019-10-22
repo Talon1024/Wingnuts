@@ -1,17 +1,12 @@
 extends Node2D
 # Radar - displays other ships in relation to the player
 
-var root_scene: Node
-var player: Spatial
-var size: Vector2
+onready var root_scene: Node = get_tree().current_scene
+onready var player: Spatial = root_scene.get_node("Player")
+onready var size: Vector2 = $Graphic.texture.get_size() / 2
 const dot_image = preload("res://assets/UI/HUD/radar_dot.png")
 
-func _ready():
-	root_scene = get_tree().current_scene
-	player = root_scene.get_node("Player")
-	size = $Graphic.texture.get_size() / 2
-
-func position_for(from: Spatial, thing_pos: Vector3) -> Vector2:
+static func position_for(from: Spatial, thing_pos: Vector3) -> Vector2:
 	"Get normalized 2D radar position for a 3D node from another 3D node"
 	var relative_right = from.transform.basis.xform(Vector3.RIGHT)
 	var relative_down = from.transform.basis.xform(Vector3.DOWN)
@@ -24,12 +19,12 @@ func position_for(from: Spatial, thing_pos: Vector3) -> Vector2:
 	var z = relative_fwd.dot(relative_pos)
 	# Convert to spherical coordinates
 	# https://en.wikipedia.org/wiki/Spherical_coordinate_system#Coordinate_system_conversions
-	# Also https://en.wikipedia.org/wiki/Polar_coordinate_system#Converting_between_polar_and_Cartesian_coordinates
 	# var r = Vector3(x, y, z).length()  # Always 1, since relative_pos is normalized
 	var angle = atan2(y, x)
 	# r will always be 1, so there is no need to divide by r.
 	# Also, divide by PI to "normalize" the radius.
 	var distance = acos(z) / PI
+	# https://en.wikipedia.org/wiki/Polar_coordinate_system#Converting_between_polar_and_Cartesian_coordinates
 	return Vector2(distance * cos(angle), distance * sin(angle))
 
 func _process(delta):

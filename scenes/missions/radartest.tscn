@@ -20,12 +20,9 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -28.8864 )
 
 [node name="Ship4" parent="." index="11" instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 59.0392 )
-on_radar = false
 
 [node name="Ship2" parent="." index="12" instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -21.0917, -13.3412, 21.0477 )
-on_radar = false
 
 [node name="Ship3" parent="." index="13" instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 24.3771, 15.5011, 33.2453 )
-on_radar = false
