@@ -1,14 +1,10 @@
 extends Node2D
 
-var dots = []
-
-func add_dot(image: Texture, pos: Vector2, color: Color = Color(1,1,1,1)):
-	dots.append({image = image, pos = pos, color = color})
+var dots = {}
 
 func _draw():
 	for dot in dots:
-		draw_texture(dot.image, dot.pos, dot.color)
-	dots.clear()
+		draw_texture(dots[dot].image, dots[dot].pos, dots[dot].color)
 
 func _process(delta):
 	update()

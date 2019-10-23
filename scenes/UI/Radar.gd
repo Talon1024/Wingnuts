@@ -29,13 +29,16 @@ static func position_for(from: Transform, thing_pos: Vector3) -> Vector2:
 
 func _process(delta):
 	var children = root_scene.get_children()
-	var radar_dots = []
+	var dots = {}
 	for spacething in children:
 		if (spacething != player and
-				spacething.has_method("_visible_on_radar") and
-				spacething.call("_visible_on_radar")):
-			radar_dots.append(position_for(
-				player.transform, spacething.transform.origin) * size)
-	# Draw dots
-	for radar_dot in radar_dots:
-		$Dots.add_dot(dot_image, radar_dot)
+				spacething.has_method("_visible_on_radar")):
+			var dot_image = spacething.call("_visible_on_radar")
+			if dot_image:
+				dots[spacething] = {
+					pos = position_for(
+						player.transform, spacething.transform.origin) * size,
+					image = dot_image,
+					color = Color(1,0,0,1),
+				}
+	$Dots.dots = dots

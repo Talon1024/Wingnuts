@@ -84,6 +84,12 @@ var power: int = 20 # Amount of energy available for weapons
 var power_regen: int = 2
 
 
+# ========== AI/Gameplay ==========
+var alignment: int = 0
+export(Texture) var radar_dot = load("res://assets/UI/HUD/radar_dot.png")
+export(Texture) var active_radar_dot = load("res://assets/UI/HUD/radar_dot_active.png")
+
+
 # ========== Control ==========
 var target_velocity: Vector3 = Vector3(0,0,0)
 onready var pilot = $Pilot
@@ -216,9 +222,11 @@ func _handle_firing(array, method):
 				gun.bullet_scene)
 
 
-# Whether the ship should be visible on the player's radar
-func _visible_on_radar() -> bool:
-	return on_radar
+# What icon to use for the radar
+func _visible_on_radar(selected: bool = false) -> Texture:
+	if selected:
+		return active_radar_dot
+	return radar_dot
 
 
 func _physics_process(delta):
