@@ -29,16 +29,14 @@ static func position_for(from: Transform, thing_pos: Vector3) -> Vector2:
 
 func _process(delta):
 	var children = root_scene.get_children()
-	var dots = {}
 	for spacething in children:
 		if (spacething != player and
 				spacething.has_method("_visible_on_radar")):
 			var dot_image = spacething.call("_visible_on_radar")
 			if dot_image:
-				dots[spacething] = {
+				$Dots.dots[spacething] = {
 					pos = position_for(
 						player.transform, spacething.transform.origin) * size,
 					image = dot_image,
 					color = Color(1,0,0,1),
 				}
-	$Dots.dots = dots
