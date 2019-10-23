@@ -36,7 +36,7 @@ func _process(delta):
 			if dot_image:
 				$Dots.dots[spacething] = {
 					pos = position_for(
-						player.transform, spacething.transform.origin) * size,
+						player.transform, spacething.translation) * size - (dot_image.get_size() / 2),
 					image = dot_image,
 					color = Color(1,0,0,1),
 				}
