@@ -4,15 +4,15 @@ extends Node2D
 onready var root_scene: Node = get_tree().current_scene
 onready var player: Spatial = root_scene.get_node("Player")
 onready var size: Vector2 = $Graphic.texture.get_size() / 2
-const dot_image = preload("res://assets/UI/HUD/radar_dot.png")
+const dot_image: Texture = preload("res://assets/UI/HUD/radar_dot.png")
 
-static func position_for(from: Spatial, thing_pos: Vector3) -> Vector2:
+static func position_for(from: Transform, thing_pos: Vector3) -> Vector2:
 	"Get normalized 2D radar position for a 3D node from another 3D node"
-	var relative_right = from.transform.basis.xform(Vector3.RIGHT)
-	var relative_down = from.transform.basis.xform(Vector3.DOWN)
-	var relative_fwd = from.transform.basis.xform(Vector3.FORWARD)
+	var relative_right = from.basis.xform(Vector3.RIGHT)
+	var relative_down = from.basis.xform(Vector3.DOWN)
+	var relative_fwd = from.basis.xform(Vector3.FORWARD)
 
-	var relative_pos = (thing_pos - from.transform.origin).normalized()
+	var relative_pos = (thing_pos - from.origin).normalized()
 
 	var x = relative_right.dot(relative_pos)
 	var y = relative_down.dot(relative_pos)
@@ -28,17 +28,14 @@ static func position_for(from: Spatial, thing_pos: Vector3) -> Vector2:
 	return Vector2(distance * cos(angle), distance * sin(angle))
 
 func _process(delta):
-	for radar_dot in $Dots.get_children():
-		$Dots.remove_child(radar_dot)
 	var children = root_scene.get_children()
 	var radar_dots = []
 	for spacething in children:
 		if (spacething != player and
 				spacething.has_method("_visible_on_radar") and
 				spacething.call("_visible_on_radar")):
-			radar_dots.append(position_for(player, spacething.transform.origin) * size)
+			radar_dots.append(position_for(
+				player.transform, spacething.transform.origin) * size)
+	# Draw dots
 	for radar_dot in radar_dots:
-		var dot = Sprite.new()
-		dot.position = radar_dot
-		dot.texture = dot_image
-		$Dots.add_child(dot)
+		$Dots.add_dot(dot_image, radar_dot)
