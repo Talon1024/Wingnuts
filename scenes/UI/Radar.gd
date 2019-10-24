@@ -11,15 +11,11 @@ onready var size: Vector2 = $Graphic.texture.get_size() / 2
 
 static func position_for(from: Transform, thing_pos: Vector3) -> Vector2:
 	# Get normalized 2D radar position for a 3D node from a 3D transform
-	var relative_right = from.basis.xform(Vector3.RIGHT)
-	var relative_down = from.basis.xform(Vector3.DOWN)
-	var relative_fwd = from.basis.xform(Vector3.FORWARD)
-
 	var relative_pos = (thing_pos - from.origin).normalized()
 
-	var x = relative_right.dot(relative_pos)
-	var y = relative_down.dot(relative_pos)
-	var z = relative_fwd.dot(relative_pos)
+	var x = from.basis.x.dot(relative_pos)
+	var y = -from.basis.y.dot(relative_pos)
+	var z = -from.basis.z.dot(relative_pos)
 	# Convert to spherical coordinates
 	# https://en.wikipedia.org/wiki/Spherical_coordinate_system#Coordinate_system_conversions
 	# var r = Vector3(x, y, z).length()  # Always 1, since relative_pos is normalized
