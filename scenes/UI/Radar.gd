@@ -30,6 +30,21 @@ static func position_for(from: Transform, thing_pos: Vector3) -> Vector2:
 func _ready():
 	PlayerInfo.connect("added", self, "_on_player_added")
 	PlayerInfo.connect("removed", self, "_on_player_removed")
+	update()
+
+
+func _draw():
+	var fov_circle = PoolVector2Array([])
+	# 32 is the radius of the 180 degree radar circle
+	var fov_circle_radius = deg2rad(Settings.fov) / PI * 32
+	var fov_circle_circumference = round(fov_circle_radius * TAU) # Circumference
+	for point in range(fov_circle_circumference):
+		var angle = point / fov_circle_circumference * PI * 2
+		fov_circle.append(Vector2(cos(angle), sin(angle)) * fov_circle_radius)
+	# Complete the circle
+	fov_circle.append(Vector2(cos(0), sin(0)) * fov_circle_radius)
+	# draw_circle will fill in the circle
+	draw_polyline(fov_circle, Color(0,1,0,1), 1.0, true)
 
 
 func _process(delta):
