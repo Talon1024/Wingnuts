@@ -36,7 +36,7 @@ func _ready():
 	PlayerInfo.ship = $Player
 	PlayerInfo.ship.visible = false
 	PlayerInfo.ship.add_child(PlayerPilot.new())
-	PlayerInfo.emit_signal("added_to_ship", PlayerInfo.ship)
+	PlayerInfo.emit_signal("added", PlayerInfo.ship)
 	OS.window_size = Settings.resolution
 	_setup_env()
 	for child in get_children():

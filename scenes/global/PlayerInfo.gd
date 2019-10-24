@@ -9,11 +9,7 @@ const Ship = preload("res://scenes/base/Ship.gd")
 var ship: Ship
 
 
+# At GodotCon Poznan 2019, someone talked about putting signals on singletons
+# to help developers "manage complexity"
 signal added
 signal removed
-
-
-func _ready():
-	var hud = get_tree().current_scene.get_node("HUD")
-	connect("added", hud, "_on_Player_added")
-	connect("removed", hud, "_on_Player_removed")

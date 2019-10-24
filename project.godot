@@ -9,13 +9,31 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Label",
+"class": "KpsSpeedDisplay",
+"language": "GDScript",
+"path": "res://scenes/UI/HUD/KpsDisplay.gd"
+}, {
 "base": "Node",
 "class": "PilotPlayer",
 "language": "GDScript",
 "path": "res://scenes/pilots/PlayerPilot.gd"
+}, {
+"base": "Viewport",
+"class": "RadarDisplay",
+"language": "GDScript",
+"path": "res://scenes/UI/HUD/RadarView.gd"
+}, {
+"base": "Label",
+"class": "SetSpeedDisplay",
+"language": "GDScript",
+"path": "res://scenes/UI/HUD/SetDisplay.gd"
 } ]
 _global_script_class_icons={
-"PilotPlayer": "res://editor/icons/pilot.png"
+"KpsSpeedDisplay": "",
+"PilotPlayer": "res://editor/icons/pilot.png",
+"RadarDisplay": "",
+"SetSpeedDisplay": ""
 }
 
 [application]
