@@ -20,3 +20,5 @@ var tonemap: int = Environment.TONE_MAPPER_ACES # Environment.ToneMapper
 var ssao: bool = true
 var shadows: bool = true
 var fov: int = 100
+
+signal fov_changed

@@ -30,6 +30,7 @@ static func position_for(from: Transform, thing_pos: Vector3) -> Vector2:
 func _ready():
 	PlayerInfo.connect("added", self, "_on_player_added")
 	PlayerInfo.connect("removed", self, "_on_player_removed")
+	Settings.connect("fov_changed", self, "on_fov_changed")
 	update()
 
 
@@ -42,7 +43,7 @@ func _draw():
 		var angle = point / fov_circle_circumference * PI * 2
 		fov_circle.append(Vector2(cos(angle), sin(angle)) * fov_circle_radius)
 	# Complete the circle
-	fov_circle.append(Vector2(cos(0), sin(0)) * fov_circle_radius)
+	fov_circle.append(Vector2(1, 0) * fov_circle_radius)
 	# draw_circle will fill in the circle
 	draw_polyline(fov_circle, Color(0,1,0,1), 1.0, true)
 
@@ -81,3 +82,7 @@ func _on_player_added(ship: Ship):
 func _on_player_removed():
 	player = null
 	$Dots.dots.clear()
+
+
+func _on_fov_changed():
+	update()
