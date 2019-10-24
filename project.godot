@@ -24,6 +24,11 @@ config/name="Wingnuts"
 run/main_scene="res://scenes/base/Space.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+PlayerInfo="*res://scenes/global/PlayerInfo.gd"
+Settings="*res://scenes/global/Settings.gd"
+
 [display]
 
 window/size/width=1280

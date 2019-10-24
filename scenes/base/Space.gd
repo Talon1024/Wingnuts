@@ -4,14 +4,15 @@ const Ship = preload("res://scenes/base/Ship.gd")
 const SpaceEnvironment = preload("res://scenes/base/SpaceEnvironment.gd")
 const PlayerPilot = preload("res://scenes/pilots/PlayerPilot.gd")
 
-onready var player: Ship = $Player
 onready var cockpitCamera: Camera = $Player/Camera
 onready var chaseCamera: InterpolatedCamera = $ChaseCamera
 
 
 func _setup_env():
 	# Setup environment according to user's settings
-	var environment: SpaceEnvironment = $SpaceEnvironment
+	var environment: Environment = $SpaceEnvironment.environment
+	environment.tonemap_mode = Settings.tonemap
+	environment.ssao_enabled = Settings.ssao
 
 
 func _setup_camera(cam: Camera, target: Node = null):
@@ -22,7 +23,7 @@ func _setup_camera(cam: Camera, target: Node = null):
 	cam.transform = target.transform
 	cam.keep_aspect = Camera.KEEP_WIDTH
 	cam.far = 1000
-	cam.fov = 100  # Get from settings
+	cam.fov = Settings.fov
 
 
 func _ready():
@@ -32,17 +33,24 @@ func _ready():
 	# Set up cockpit camera and use it as the default
 	_setup_camera(cockpitCamera, $Player/CockpitPosition)
 	cockpitCamera.make_current()
-	player.visible = false
-	$Player.add_child(PlayerPilot.new())
+	PlayerInfo.ship = $Player
+	PlayerInfo.ship.visible = false
+	PlayerInfo.ship.add_child(PlayerPilot.new())
+	PlayerInfo.emit_signal("added_to_ship", PlayerInfo.ship)
+	OS.window_size = Settings.resolution
+	_setup_env()
+	for child in get_children():
+		if child is Light:
+			child.shadow_enabled = Settings.shadows
 
 
 func _process(delta):
 	if Input.is_action_just_pressed("camera_chase"):
 		chaseCamera.make_current()
-		player.visible = true
+		PlayerInfo.ship.visible = true
 	elif Input.is_action_just_pressed("camera_front"):
 		cockpitCamera.make_current()
-		player.visible = false
+		PlayerInfo.ship.visible = false
 
 
 func _on_Player_weapon_fired(shooter: Ship, transform: Transform, weapon_scene: PackedScene):
