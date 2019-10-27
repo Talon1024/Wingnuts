@@ -43,7 +43,7 @@ func _draw():
 		var angle = point / fov_circle_circumference * PI * 2
 		fov_circle.append(Vector2(cos(angle), sin(angle)) * fov_circle_radius)
 	# Complete the circle
-	fov_circle.append(Vector2(1, 0) * fov_circle_radius)
+	fov_circle.append(fov_circle[0])
 	# draw_circle will fill in the circle
 	draw_polyline(fov_circle, Color(0,1,0,1), 1.0, true)
 
