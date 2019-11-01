@@ -3,9 +3,10 @@ extends KinematicBody
 # NOTE: This is not meant to be used directly. Individual weapon types should
 # be new scenes inheriting from Bullet.tscn.
 #
-# The only thing individual weapon types really need is a CollisionShape.
-# Everything else is up to the individual weapon class. Note that bullets are,
-# by default, exempt from colliding with their respective shooters
+# Individual weapon types need a CollisionShape, and can optionally override
+# _get_requirements to specify what the ship needs to have in order to fire the
+# weapon. Note that bullets are, by default, exempt from colliding with their
+# respective shooters.
 
 var velocity: Vector3
 var lifetime: float = 2.0
@@ -35,3 +36,7 @@ func _get_damage() -> int:
 # fired again
 func _get_refire() -> float:
 	return refire
+
+
+func _get_requirements() -> Dictionary:
+	return {}

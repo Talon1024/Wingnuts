@@ -1,9 +1,12 @@
 extends Spatial
 # Weapon - controls firing "bullets"
 
+
 export(PackedScene) var bullet_scene
 export(Mesh) var weapon_model
 
+
+var ammunition := 0
 var refire_delay := 0.0
 var armed: bool = true
 
@@ -23,9 +26,17 @@ func _arm(arm: bool):
 
 # Attempts to fire the weapon. Called whenever the pilot of the parent ship
 # opens fire. Returns whether or not the weapon should be fired.
-func _fire() -> bool:
+# Optionally pass the amount of energy the ship has to this method.
+func _fire(energy: float = 0.0) -> bool:
 	if armed and refire_delay == 0.0:
 		var bullet = bullet_scene.instance()
+		var requirements = {}
+		if bullet.has_method("_get_requirements"):
+			requirements = bullet._get_requirements()
+		if requirements.has("energy") and requirements.energy > energy:
+			return false
+		if requirements.has("ammo") and ammunition < requirements.ammo:
+			return false
 		if bullet.has_method("_get_refire"):
 			refire_delay = bullet._get_refire()
 		bullet.free()
@@ -37,7 +48,7 @@ func _fire() -> bool:
 # stops firing. Returns whether or not the weapon should be fired. Useful for
 # weapons that charge when the pilot holds the fire button, and fires when the
 # fire button is released.
-func _unfire() -> bool:
+func _unfire(energy: float = 0.0) -> bool:
 	return false
 
 
