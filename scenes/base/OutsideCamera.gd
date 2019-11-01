@@ -19,6 +19,6 @@ func _process(delta):
 
 		# https://en.wikipedia.org/wiki/Spherical_coordinate_system#Coordinate_system_conversions
 		translation.x = radius * sin(theta) * cos(phi)
-		translation.y = radius * sin(theta) * sin(phi)
-		translation.z = radius * cos(theta)
-		look_at(Vector3.ZERO, Vector3.UP)
+		translation.z = radius * sin(theta) * sin(phi)
+		translation.y = radius * cos(theta)
+		look_at(get_parent().translation, get_parent().transform.basis.y)
