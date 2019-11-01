@@ -4,8 +4,10 @@ const Ship = preload("res://scenes/base/Ship.gd")
 const SpaceEnvironment = preload("res://scenes/base/SpaceEnvironment.gd")
 const PlayerPilot = preload("res://scenes/pilots/PlayerPilot.gd")
 
+
 onready var cockpitCamera: Camera = $Player/Camera
 onready var chaseCamera: InterpolatedCamera = $ChaseCamera
+onready var outsideCamera: Camera = $Player/OutsideCamera
 
 
 func _setup_env():
@@ -16,11 +18,12 @@ func _setup_env():
 
 
 func _setup_camera(cam: Camera, target: Node = null):
-	if cam.has_method("set_target"):
-		# It's an InterpolatedCamera
-		cam.set_target(target)
-		cam.enabled = true
-	cam.transform = target.transform
+	if target:
+		cam.transform = target.transform
+		if cam.has_method("set_target"):
+			# It's an InterpolatedCamera
+			cam.set_target(target)
+			cam.enabled = true
 	cam.keep_aspect = Camera.KEEP_WIDTH
 	cam.far = 1000
 	cam.fov = Settings.fov
@@ -32,6 +35,7 @@ func _ready():
 	_setup_camera(chaseCamera, $Player/ChasePosition)
 	# Set up cockpit camera and use it as the default
 	_setup_camera(cockpitCamera, $Player/CockpitPosition)
+	_setup_camera(outsideCamera, null)
 	cockpitCamera.make_current()
 	PlayerInfo.ship = $Player
 	PlayerInfo.ship.visible = false
@@ -48,12 +52,18 @@ func _process(delta):
 	if Input.is_action_just_pressed("camera_chase"):
 		chaseCamera.make_current()
 		PlayerInfo.ship.visible = true
-	elif Input.is_action_just_pressed("camera_front"):
+	elif (Input.is_action_just_pressed("camera_front") or 
+			Input.is_action_just_pressed("camera_left") or
+			Input.is_action_just_pressed("camera_right") or
+			Input.is_action_just_pressed("camera_back")):
 		cockpitCamera.make_current()
 		PlayerInfo.ship.visible = false
+	elif Input.is_action_just_pressed("camera_outside"):
+		outsideCamera.make_current()
+		PlayerInfo.ship.visible = true
 
 
-func _on_Player_weapon_fired(shooter: Ship, transform: Transform, weapon_scene: PackedScene):
+func _on_weapon_fired(shooter: Ship, transform: Transform, weapon_scene: PackedScene):
 	var bullet = weapon_scene.instance()
 	bullet.add_collision_exception_with(shooter)
 	bullet.global_transform = transform

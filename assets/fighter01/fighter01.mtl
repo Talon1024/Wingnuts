@@ -1,0 +1,15 @@
+# Blender MTL File: 'fighter01v2.blend'
+# Material Count: 1
+
+newmtl Material
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Bump /home/kevinc/Downloads/Resources/OpenGameArt/fighters/f01_normal.png
+map_Kd /home/kevinc/Downloads/Resources/OpenGameArt/fighters/f01_diffuse.png
+map_Ke /home/kevinc/Downloads/Resources/OpenGameArt/fighters/f01_emission.png
