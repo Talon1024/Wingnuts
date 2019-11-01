@@ -132,6 +132,12 @@ const Y_AXIS: Vector3 = Vector3(0,1,0)
 const Z_AXIS: Vector3 = Vector3(0,0,1)
 
 
+func _ready():
+	# Automatically connect weapon_fired signal
+	if get_parent().has_method("_on_weapon_fired"):
+		connect("weapon_fired", get_parent(), "_on_weapon_fired")
+
+
 func _floorLowValue(value, threshold = .1):
 	if abs(value) < threshold:
 		return 0
