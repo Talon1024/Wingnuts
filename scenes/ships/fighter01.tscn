@@ -81,4 +81,4 @@ shape = SubResource( 5 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.295701, -3.04477 )
 
 [node name="ChasePosition" type="Position3D" parent="." index="10"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.28512, 8.47878 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.28512, 11.4855 )
