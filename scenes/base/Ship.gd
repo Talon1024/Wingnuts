@@ -103,6 +103,7 @@ var control_data: Dictionary = {
 	"fire_gun": false,
 	"fire_missile": false,
 }
+var target: Spatial = null
 var unfire_gun: bool = false
 var unfire_missile: bool = false
 signal weapon_fired
