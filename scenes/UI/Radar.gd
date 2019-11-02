@@ -84,5 +84,10 @@ func _on_player_removed():
 	$Dots.dots.clear()
 
 
+func _on_ship_died(ship: Ship):
+	# Remove ship from radar
+	$Dots.dots.erase(ship)
+
+
 func _on_fov_changed():
 	update()

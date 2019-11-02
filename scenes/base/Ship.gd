@@ -132,6 +132,10 @@ const Y_AXIS: Vector3 = Vector3(0,1,0)
 const Z_AXIS: Vector3 = Vector3(0,0,1)
 
 
+# ========== Events ==========
+signal died
+
+
 func _ready():
 	# Automatically connect weapon_fired signal
 	if get_parent().has_method("_on_weapon_fired"):
@@ -179,10 +183,15 @@ func _receive_damage(direction: Vector3, position: Vector3, damage: int):
 			$Tween.start()
 			var shield_mtl = shield_visual.get_surface_material(0)
 			if shield_mtl.has_method("set_shader_param"):
-				print("impactDirection: ", direction)
+				# print("impactDirection: ", direction)
 				shield_mtl.set_shader_param("impactDirection", direction)
 				shield_mtl.set_shader_param("impactLocation", position)
+		print(shield_unit.sections)
 	health -= damage_to_take
+	if damage_to_take > 0:
+		print(health)
+	if health <= 0:
+		_die()
 
 
 func _process(delta):
@@ -280,3 +289,10 @@ func _physics_process(delta):
 func set_pilot(pilot: Node):
 	if pilot.has_method("think"):
 		self.pilot = pilot
+
+
+# Called when the ship's health is 0 or less
+func _die():
+	emit_signal("died")
+	# Spawn explosion
+	queue_free()

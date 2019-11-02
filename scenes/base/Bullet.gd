@@ -25,6 +25,15 @@ func _process(delta):
 
 func _physics_process(delta):
 	var collision = move_and_collide(velocity * delta)
+	if collision:
+		if collision.collider.has_method("_receive_damage"):
+			collision.collider._receive_damage(
+				-collision.normal,
+				collision.position,
+				_get_damage()
+			)
+			_explode()
+			queue_free()
 
 
 # Called by things that can be damaged to retrieve the amount of damage to do
@@ -38,5 +47,11 @@ func _get_refire() -> float:
 	return refire
 
 
+# Spawn explosion
+func _explode():
+	pass
+
+
+# Get a dictionary specifying weapon firing requirements
 func _get_requirements() -> Dictionary:
 	return {}
