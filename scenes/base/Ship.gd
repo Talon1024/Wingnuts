@@ -230,11 +230,13 @@ func _process(delta):
 # Default weapons firing/"unfiring" logic
 func _handle_firing(array, method):
 	for gun in array:
-		if gun.has_method(method) and gun.call(method):
-			emit_signal("weapon_fired",
-				self,
-				gun.global_transform,
-				gun.bullet_scene)
+		if gun.has_method(method):
+			var requirements = gun.call(method)
+			if requirements.success:
+				emit_signal("weapon_fired",
+					self,
+					gun.global_transform,
+					gun.bullet_scene)
 
 
 # What icon to use for the radar

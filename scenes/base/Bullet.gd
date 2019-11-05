@@ -52,6 +52,8 @@ func _explode():
 	pass
 
 
-# Get a dictionary specifying weapon firing requirements
-func _get_requirements() -> Dictionary:
+# Get a dictionary specifying weapon firing requirements. Optionally takes a
+# "charge" argument, which is used to calculate the required energy if this
+# weapon is a charging weapon.
+func _get_requirements(charge: float = 0.0) -> Dictionary:
 	return {}
