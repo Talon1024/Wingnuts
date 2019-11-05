@@ -50,24 +50,30 @@ func _draw():
 
 func _process(delta):
 	if not player:
+		if not $Dots.dots.empty():
+			$Dots.dots.clear()
 		return
-	var player_scene = player.get_parent()
-	var children = player_scene.get_children()
-	for spacething in children:
-		if (spacething != player and
-					spacething.has_method("_visible_on_radar")):
-			var dot_image = spacething.call("_visible_on_radar")
-			if dot_image:
-				var iff_colour = Color(1,0,0,1)
-				if spacething.alignment == player.alignment:
-					iff_colour = Color(0,0,1,1)
-				$Dots.dots[spacething] = {
-					pos = abs_position_for(
-							player.transform, spacething.translation,
-							dot_image.get_size()),
-					image = dot_image,
-					color = iff_colour,
-				}
+	var other_ships = player.get_parent().get_children()
+	for ship in other_ships:
+		if (ship != player and
+					ship.has_method("_visible_on_radar")):
+			_set_dot(ship)
+
+
+func _set_dot(ship: Ship):
+	# Use node path as dictionary key
+	var image = ship._visible_on_radar()
+	if image:
+		var colour = Color(1,0,0,1)
+		if ship.alignment == player.alignment:
+			colour = Color(0,0,1,1)
+		var path = String(ship.get_path())
+		$Dots.dots[path] = {
+			pos = abs_position_for(player.transform,
+				ship.translation, image.get_size()),
+			image = image,
+			color = colour,
+		}
 
 
 func abs_position_for(source: Transform, target: Vector3, dot_size: Vector2) -> Vector2:
@@ -86,7 +92,7 @@ func _on_player_removed():
 
 func _on_ship_died(ship: Ship):
 	# Remove ship from radar
-	$Dots.dots.erase(ship)
+	$Dots.dots.erase(String(ship.get_path()))
 
 
 func _on_fov_changed():
