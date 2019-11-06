@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://scenes/base/Space.tscn" type="PackedScene" id=1]
-[ext_resource path="res://scenes/ships/Epee.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/ships/fighter01.tscn" type="PackedScene" id=2]
 
 [node name="Spatial" index="0" instance=ExtResource( 1 )]
 
