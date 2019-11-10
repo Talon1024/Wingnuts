@@ -85,7 +85,8 @@ var power_regen: int = 2
 
 
 # ========== AI/Gameplay ==========
-var alignment: int = 0
+var alignment: int = 0  # Team/faction association
+var forced_dot_hue: float = -1  # Hue to force dot to appear as. -1 disables forced hue
 export(Texture) var radar_dot = load("res://assets/UI/HUD/radar_dot.png")
 export(Texture) var active_radar_dot = load("res://assets/UI/HUD/radar_dot_active.png")
 
