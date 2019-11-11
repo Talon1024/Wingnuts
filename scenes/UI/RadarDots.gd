@@ -57,7 +57,7 @@ func _process(delta):
 
 func _set_dot(ship: Ship):
 	# Use node path as dictionary key
-	var node_path = String(ship.get_path())
+	var ship_id = ship.get_instance_id()
 	var image = ship._visible_on_radar()
 	if image:
 		var hue = 0
@@ -66,7 +66,7 @@ func _set_dot(ship: Ship):
 		elif ship.alignment == player.alignment:
 			hue = .66666666666  # .6666666 = 240 degrees = blue
 		var colour = Color().from_hsv(hue, 1, 1, 1)
-		dots[node_path] = {
+		dots[ship_id] = {
 			pos = abs_position_for(player.transform,
 				ship.translation, size),
 			image = image,
@@ -88,5 +88,5 @@ func _on_player_removed():
 
 
 func _on_ship_died(ship: Ship):
-	var node_path = String(ship.get_path())
-	dots.erase(node_path)
+	var ship_id = ship.get_instance_id()
+	dots.erase(ship_id)
