@@ -3,19 +3,18 @@ extends Node2D
 
 
 static func position_for(from: Transform, thing_pos: Vector3) -> Vector2:
-	# Get normalized 2D radar position for a 3D node from a 3D transform
+	# Get normalized 2D radar position for a 3D node from a 3D transform.
 	var relative_pos = (thing_pos - from.origin).normalized()
-
-	var x = from.basis.x.dot(relative_pos)
-	var y = -from.basis.y.dot(relative_pos)
-	var z = -from.basis.z.dot(relative_pos)
+	# Get position of ship as it would appear from the source ship's pilot's POV.
+	var screen_pos = from.basis.xform_inv(relative_pos)
 	# Convert to spherical coordinates
 	# https://en.wikipedia.org/wiki/Spherical_coordinate_system#Coordinate_system_conversions
 	# var r = Vector3(x, y, z).length()  # Always 1, since relative_pos is normalized
-	var angle = atan2(y, x)
+	var angle = atan2(-screen_pos.y, screen_pos.x)
 	# r will always be 1, so there is no need to divide by r.
-	# Also, divide by PI to "normalize" the radius.
-	var distance = acos(z) / PI
+	# Also, divide by PI to "normalize" the distance, which clamps its value so that -1 <= distance <= 1.
+	var distance = acos(-screen_pos.z) / PI
+	# Treat spherical coordinates as polar coordinates and convert to cartesian coordinates.
 	# https://en.wikipedia.org/wiki/Polar_coordinate_system#Converting_between_polar_and_Cartesian_coordinates
 	return Vector2(distance * cos(angle), distance * sin(angle))
 
