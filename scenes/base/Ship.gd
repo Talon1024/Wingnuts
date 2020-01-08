@@ -24,6 +24,7 @@ extends KinematicBody
 
 class ShieldUnit:
 	var sections = []
+	var recharge_rate = 1
 	func _init(sections_health: Array = []):
 		sections = sections_health
 		# Ensure I'm doing it right. Section 0 should point forwards
@@ -32,6 +33,13 @@ class ShieldUnit:
 #			var vector_rotation = float(section) / len(sections) * PI * 2
 #			print(Vector3(0,0,1).rotated(Y_AXIS, vector_rotation))
 
+	func _process(delta):
+		var section_count = len(sections)
+		for section in range(section_count):
+			# TODO: Apply per-section power setting
+			var section_focus = 1 / section_count
+			var section_add = delta * section_focus * recharge_rate
+			sections[section] += section_add
 
 	# Absorb incoming damage
 	# Returns amount of damage to apply to hull
@@ -71,8 +79,8 @@ onready var shield_visual: Node = $ShieldVisual
 export var base_health: int = 100
 export var max_speed: float = 25
 export var afterburner_speed: float = 100
-#export var afterburnerAcceleration: float = 120
-#export var acceleration: float = 30
+#export var afterburner_acceleration: float = 50
+#export var acceleration: float = 25
 #export var shieldLevel: int = 1  # Shield capacitor level
 export var pitch_speed: float = 90  # DPS
 export var yaw_speed: float = 90
@@ -227,6 +235,9 @@ func _process(delta):
 			_handle_firing(missiles, "_unfire")
 			unfire_missile = false
 
+	if shield_unit:
+		shield_unit._process(delta)
+
 
 # Default weapons firing/"unfiring" logic
 func _handle_firing(array, method):
@@ -258,9 +269,9 @@ func _physics_process(delta):
 	velocity = velocity.rotated(Z_AXIS, -roll_delta * delta)
 
 #	TODO: acceleration
-#	var current_acceleration = acceleration
+#	var current_acceleration = acceleration * delta
 #	if control_data.afterburner:
-#		current_acceleration = afterburner_acceleration
+#		current_acceleration = afterburner_acceleration * delta
 	if not control_data.glide:
 		velocity = lerp(velocity, target_velocity, .03)
 #		velocity = velocity.move_toward(target_velocity, current_acceleration) # Unstable branch feature
