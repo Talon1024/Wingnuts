@@ -163,7 +163,7 @@ func set_shield_time(shield_time: float):
 			shield_visual.visible = true
 			var shield_mtl = shield_visual.get_surface_material(0)
 			if shield_mtl.has_method("set_shader_param"):
-				shield_mtl.set_shader_param("showTime", shield_time)
+				shield_mtl.set_shader_param("show_time", shield_time)
 		else:
 			shield_visual.visible = false
 
@@ -192,9 +192,7 @@ func _receive_damage(direction: Vector3, position: Vector3, damage: int):
 			$Tween.start()
 			var shield_mtl = shield_visual.get_surface_material(0)
 			if shield_mtl.has_method("set_shader_param"):
-				# print("impactDirection: ", direction)
-				shield_mtl.set_shader_param("impactDirection", direction)
-				shield_mtl.set_shader_param("impactLocation", position)
+				shield_mtl.set_shader_param("impact_location", position)
 		print(shield_unit.sections)
 	health -= damage_to_take
 	if damage_to_take > 0:
