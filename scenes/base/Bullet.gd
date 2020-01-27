@@ -13,8 +13,6 @@ var lifetime: float = 2.0
 var refire: float = 1.0
 var speed: float = 200.0
 var add_speed: bool = true
-# Used for ITTS calculation
-onready var distance: float = lifetime * velocity.length()
 
 
 func _process(delta):

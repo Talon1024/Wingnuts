@@ -20,18 +20,18 @@ func _process(delta):
 	if intercept_time >= 0:
 		$InterceptTarget.translation = player_ship.translation + (player_global_velocity * delta * intercept_time)
 
-# https://officialtwelve.blogspot.com/2015/08/projectile-interception.html
-# https://stackoverflow.com/questions/17204513/how-to-find-the-interception-coordinates-of-a-moving-target-in-3d-space
 # https://indyandyjones.wordpress.com/2010/04/08/intercepting-a-target-with-projectile/
 # Position after a given amount of time = original position + velocity * time
 
-func find_intercept_time(shot_pos: Vector3, target_pos: Vector3, target_vel: Vector3, shot_speed: float) -> float:
+func find_intercept_time(shot_pos: Vector3, target_pos: Vector3,
+			target_vel: Vector3, shot_speed: float) -> float:
 	var to_target = target_pos - shot_pos
 	var a = target_vel.length_squared() - shot_speed * shot_speed
 	var b = 2 * target_vel.dot(to_target)
 	var c = to_target.length_squared()
-	if (b * b) < (4 * a * c):
+	var radicand = (b * b) - (4 * a * c)
+	if radicand < 0:
+		# Cannot calculate intercept time
 		return -1.0
-	# var time_a = (-b + sqrt((b * b) - (4 * a * c))) / (2 * a)
-	var time_b = (-b - sqrt((b * b) - (4 * a * c))) / (2 * a)
-	return time_b
+	var time = (-b - sqrt(radicand)) / (2 * a)
+	return time

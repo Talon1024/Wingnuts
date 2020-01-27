@@ -19,7 +19,7 @@ input_name = "view"
 [sub_resource type="VisualShaderNodeColorConstant" id=5]
 constant = Color( 0.382812, 1, 0.382812, 1 )
 
-[sub_resource type="VisualShader" id=8]
+[sub_resource type="VisualShader" id=6]
 code = "shader_type spatial;
 render_mode unshaded;
 
@@ -75,23 +75,23 @@ nodes/fragment/5/position = Vector2( 140, 80 )
 nodes/fragment/connections = PoolIntArray( 3, 0, 2, 0, 4, 0, 2, 1, 2, 0, 0, 1, 5, 0, 0, 0 )
 
 [sub_resource type="ShaderMaterial" id=7]
-shader = SubResource( 8 )
+shader = SubResource( 6 )
 
-[sub_resource type="SphereMesh" id=9]
+[sub_resource type="SphereMesh" id=8]
 
-[sub_resource type="VisualShaderNodeFresnel" id=10]
+[sub_resource type="VisualShaderNodeFresnel" id=9]
 default_input_values = [ 0, Vector3( 0, 0, 0 ), 1, Vector3( 0, 0, 0 ), 2, false, 3, 2.0 ]
 
-[sub_resource type="VisualShaderNodeInput" id=11]
+[sub_resource type="VisualShaderNodeInput" id=10]
 input_name = "normal"
 
-[sub_resource type="VisualShaderNodeInput" id=12]
+[sub_resource type="VisualShaderNodeInput" id=11]
 input_name = "view"
 
-[sub_resource type="VisualShaderNodeColorConstant" id=13]
+[sub_resource type="VisualShaderNodeColorConstant" id=12]
 constant = Color( 1, 0.501961, 0.164706, 1 )
 
-[sub_resource type="VisualShader" id=14]
+[sub_resource type="VisualShader" id=13]
 code = "shader_type spatial;
 render_mode unshaded;
 
@@ -134,20 +134,20 @@ void light() {
 
 }
 "
-graph_offset = Vector2( -461, 41 )
+graph_offset = Vector2( -121, 60 )
 flags/unshaded = true
-nodes/fragment/2/node = SubResource( 10 )
-nodes/fragment/2/position = Vector2( 20, 200 )
-nodes/fragment/3/node = SubResource( 11 )
+nodes/fragment/2/node = SubResource( 9 )
+nodes/fragment/2/position = Vector2( 40, 200 )
+nodes/fragment/3/node = SubResource( 10 )
 nodes/fragment/3/position = Vector2( -200, 200 )
-nodes/fragment/4/node = SubResource( 12 )
+nodes/fragment/4/node = SubResource( 11 )
 nodes/fragment/4/position = Vector2( -180, 260 )
-nodes/fragment/5/node = SubResource( 13 )
+nodes/fragment/5/node = SubResource( 12 )
 nodes/fragment/5/position = Vector2( 200, 100 )
 nodes/fragment/connections = PoolIntArray( 3, 0, 2, 0, 4, 0, 2, 1, 2, 0, 0, 1, 5, 0, 0, 0 )
 
-[sub_resource type="ShaderMaterial" id=15]
-shader = SubResource( 14 )
+[sub_resource type="ShaderMaterial" id=14]
+shader = SubResource( 13 )
 
 [node name="Spatial" instance=ExtResource( 1 )]
 script = ExtResource( 3 )
@@ -231,5 +231,5 @@ material/0 = SubResource( 7 )
 
 [node name="InterceptTarget2" type="MeshInstance" parent="." index="10"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.17149 )
-mesh = SubResource( 9 )
-material/0 = SubResource( 15 )
+mesh = SubResource( 8 )
+material/0 = SubResource( 14 )
