@@ -1,4 +1,7 @@
 extends Spatial
+# "Training turret" - fires intercept projectiles at the player constantly.
+# I made this to ensure the AI will really know how to aim in order to land
+# hits on their target(s).
 
 
 const Intercept = preload("res://scenes/util/intercept.gd")

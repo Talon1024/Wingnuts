@@ -13,9 +13,14 @@ static func get_lead_time(to_target: Vector3,
 	var c = to_target.length_squared()
 	var radicand = (b * b) - (4 * a * c)
 	if radicand < 0:
-		# Cannot calculate intercept time
-		return -1.0
+		# Cannot calculate impact time. Maybe the target is moving too fast,
+		# or vice versa.
+		return 0.0
+	# This aims ahead of the target. If the other root was used, the calculated
+	# impact point would be behind the target.
 	var time = (-b - sqrt(radicand)) / (2 * a)
+	# It is more flexible to return just the impact time as opposed to the
+	# impact position.
 	return time
 
 # Same as get_lead_time, but calculates to_target beforehand

@@ -18,5 +18,5 @@ func _process(delta):
 	# intercept stuff
 	var player_global_velocity = player_ship.global_transform.basis.xform(player_ship.velocity)
 	var intercept_time = Intercept.find_lead_time(enemy_ship.translation, player_ship.translation, player_global_velocity * delta, 200.0 * delta)
-	if intercept_time >= 0:
+	if intercept_time > 0:
 		$InterceptTarget.translation = player_ship.translation + (player_global_velocity * delta * intercept_time)
