@@ -7,12 +7,13 @@
 
 [sub_resource type="SpatialMaterial" id=2]
 metallic = 1.0
+metallic_specular = 1.0
 roughness = 0.33
 
-[node name="Spatial" type="Spatial"]
+[node name="TrainingTurret" type="Spatial"]
 script = ExtResource( 1 )
 projectile = ExtResource( 2 )
 
-[node name="MeshInstance" type="MeshInstance" parent="."]
+[node name="Visual" type="MeshInstance" parent="."]
 mesh = SubResource( 1 )
 material/0 = SubResource( 2 )
