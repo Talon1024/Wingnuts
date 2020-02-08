@@ -3,7 +3,7 @@ extends Camera
 
 onready var radius = translation.length()
 var phi = 0
-var theta = 0
+var theta = PI / 2
 
 
 func _process(delta):

@@ -24,6 +24,7 @@ extends KinematicBody
 
 class ShieldUnit:
 	var sections = []
+	var recharge_rate = 1
 	func _init(sections_health: Array = []):
 		sections = sections_health
 		# Ensure I'm doing it right. Section 0 should point forwards
@@ -32,6 +33,13 @@ class ShieldUnit:
 #			var vector_rotation = float(section) / len(sections) * PI * 2
 #			print(Vector3(0,0,1).rotated(Y_AXIS, vector_rotation))
 
+	func _process(delta):
+		var section_count = len(sections)
+		for section in range(section_count):
+			# TODO: Apply per-section power setting
+			var section_focus = 1 / section_count
+			var section_add = delta * section_focus * recharge_rate
+			sections[section] += section_add
 
 	# Absorb incoming damage
 	# Returns amount of damage to apply to hull
@@ -71,8 +79,8 @@ onready var shield_visual: Node = $ShieldVisual
 export var base_health: int = 100
 export var max_speed: float = 25
 export var afterburner_speed: float = 100
-#export var afterburnerAcceleration: float = 120
-#export var acceleration: float = 30
+#export var afterburner_acceleration: float = 50
+#export var acceleration: float = 25
 #export var shieldLevel: int = 1  # Shield capacitor level
 export var pitch_speed: float = 90  # DPS
 export var yaw_speed: float = 90
@@ -85,7 +93,8 @@ var power_regen: int = 2
 
 
 # ========== AI/Gameplay ==========
-var alignment: int = 0
+var alignment: int = 0  # Team/faction association
+var forced_dot_hue: float = -1  # Hue to force dot to appear as. -1 disables forced hue
 export(Texture) var radar_dot = load("res://assets/UI/HUD/radar_dot.png")
 export(Texture) var active_radar_dot = load("res://assets/UI/HUD/radar_dot_active.png")
 
@@ -133,6 +142,16 @@ const Y_AXIS: Vector3 = Vector3(0,1,0)
 const Z_AXIS: Vector3 = Vector3(0,0,1)
 
 
+# ========== Events ==========
+signal died
+
+
+func _ready():
+	# Automatically connect weapon_fired signal
+	if get_parent().has_method("_on_weapon_fired"):
+		connect("weapon_fired", get_parent(), "_on_weapon_fired")
+
+
 func _floorLowValue(value, threshold = .1):
 	if abs(value) < threshold:
 		return 0
@@ -145,7 +164,7 @@ func set_shield_time(shield_time: float):
 			shield_visual.visible = true
 			var shield_mtl = shield_visual.get_surface_material(0)
 			if shield_mtl.has_method("set_shader_param"):
-				shield_mtl.set_shader_param("showTime", shield_time)
+				shield_mtl.set_shader_param("show_time", shield_time)
 		else:
 			shield_visual.visible = false
 
@@ -174,10 +193,14 @@ func _receive_damage(direction: Vector3, position: Vector3, damage: int):
 			$Tween.start()
 			var shield_mtl = shield_visual.get_surface_material(0)
 			if shield_mtl.has_method("set_shader_param"):
-				print("impactDirection: ", direction)
-				shield_mtl.set_shader_param("impactDirection", direction)
-				shield_mtl.set_shader_param("impactLocation", position)
+				var impact_location = global_transform.xform_inv(position)
+				shield_mtl.set_shader_param("impact_location", impact_location)
+		print(shield_unit.sections)
 	health -= damage_to_take
+	if damage_to_take > 0:
+		print(health)
+	if health <= 0:
+		_die()
 
 
 func _process(delta):
@@ -212,15 +235,20 @@ func _process(delta):
 			_handle_firing(missiles, "_unfire")
 			unfire_missile = false
 
+	if shield_unit:
+		shield_unit._process(delta)
+
 
 # Default weapons firing/"unfiring" logic
 func _handle_firing(array, method):
 	for gun in array:
-		if gun.has_method(method) and gun.call(method):
-			emit_signal("weapon_fired",
-				self,
-				gun.global_transform,
-				gun.bullet_scene)
+		if gun.has_method(method):
+			var requirements = gun.call(method)
+			if requirements.success:
+				emit_signal("weapon_fired",
+					self,
+					gun.global_transform,
+					gun.bullet_scene)
 
 
 # What icon to use for the radar
@@ -241,9 +269,9 @@ func _physics_process(delta):
 	velocity = velocity.rotated(Z_AXIS, -roll_delta * delta)
 
 #	TODO: acceleration
-#	var current_acceleration = acceleration
+#	var current_acceleration = acceleration * delta
 #	if control_data.afterburner:
-#		current_acceleration = afterburner_acceleration
+#		current_acceleration = afterburner_acceleration * delta
 	if not control_data.glide:
 		velocity = lerp(velocity, target_velocity, .03)
 #		velocity = velocity.move_toward(target_velocity, current_acceleration) # Unstable branch feature
@@ -275,3 +303,10 @@ func _physics_process(delta):
 func set_pilot(pilot: Node):
 	if pilot.has_method("think"):
 		self.pilot = pilot
+
+
+# Called when the ship's health is 0 or less
+func _die():
+	emit_signal("died")
+	# Spawn explosion
+	queue_free()

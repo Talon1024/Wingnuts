@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scenes/pilots/PlayerPilot.gd" type="Script" id=1]
+
+[node name="PlayerPilot" type="Node"]
+script = ExtResource( 1 )
+
+[node name="KeyboardControls" type="Node" parent="."]
+
+[node name="MouseControls" type="Node" parent="."]
+
+[node name="JoystickControls" type="Node" parent="."]
+
+[node name="NoControls" type="Node" parent="."]
