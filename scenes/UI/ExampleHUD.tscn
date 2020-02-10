@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://scenes/UI/HUD/TargetDot.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/vendor/fonts/wingmavenpro.tres" type="DynamicFont" id=2]
@@ -7,8 +7,7 @@
 [ext_resource path="res://scenes/UI/HUD/Crosshair.tscn" type="PackedScene" id=5]
 [ext_resource path="res://scenes/UI/HUD/RadarView.gd" type="Script" id=6]
 [ext_resource path="res://scenes/UI/Radar.tscn" type="PackedScene" id=7]
-[ext_resource path="res://scenes/ships/Epee.tscn" type="PackedScene" id=8]
-[ext_resource path="res://scenes/UI/HUD/TargetModelViewEnv.tres" type="Environment" id=9]
+[ext_resource path="res://scenes/UI/HUD/TargetProjection.tscn" type="PackedScene" id=8]
 
 [node name="HUD" type="Control"]
 anchor_right = 1.0
@@ -65,45 +64,40 @@ margin_left = -64.0
 margin_top = -128.0
 margin_right = 64.0
 
-[node name="Viewport" type="Viewport" parent="RadarContainer"]
+[node name="RadarDisplay" type="Viewport" parent="RadarContainer"]
 size = Vector2( 128, 128 )
 transparent_bg = true
 handle_input_locally = false
 render_target_update_mode = 3
 script = ExtResource( 6 )
 
-[node name="Node2D" parent="RadarContainer/Viewport" instance=ExtResource( 7 )]
+[node name="Radar" parent="RadarContainer/RadarDisplay" instance=ExtResource( 7 )]
 
 [node name="TargetViewContainer" type="CenterContainer" parent="."]
 anchor_top = 1.0
 anchor_bottom = 1.0
 margin_top = -128.0
 margin_right = 128.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="TextureRect" type="TextureRect" parent="TargetViewContainer"]
+[node name="TargetViewTexture" type="TextureRect" parent="TargetViewContainer"]
 margin_left = 64.0
 margin_top = 64.0
 margin_right = 64.0
 margin_bottom = 64.0
 
-[node name="ViewportContainer" type="ViewportContainer" parent="TargetViewContainer"]
+[node name="ProjectionViewport" type="ViewportContainer" parent="TargetViewContainer"]
 margin_right = 128.0
 margin_bottom = 128.0
 
-[node name="Viewport" type="Viewport" parent="TargetViewContainer/ViewportContainer"]
+[node name="Viewport" type="Viewport" parent="TargetViewContainer/ProjectionViewport"]
 size = Vector2( 128, 128 )
 own_world = true
 transparent_bg = true
 handle_input_locally = false
+usage = 3
 render_target_update_mode = 3
 
-[node name="Spatial" type="Spatial" parent="TargetViewContainer/ViewportContainer/Viewport"]
-
-[node name="Ship" parent="TargetViewContainer/ViewportContainer/Viewport/Spatial" instance=ExtResource( 8 )]
-
-[node name="Camera" type="Camera" parent="TargetViewContainer/ViewportContainer/Viewport/Spatial/Ship"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 15.5167 )
-current = true
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="TargetViewContainer/ViewportContainer/Viewport/Spatial"]
-environment = ExtResource( 9 )
+[node name="TargetProjection" parent="TargetViewContainer/ProjectionViewport/Viewport" instance=ExtResource( 8 )]
