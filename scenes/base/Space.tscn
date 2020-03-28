@@ -1,12 +1,9 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://scenes/base/Space.gd" type="Script" id=1]
 [ext_resource path="res://scenes/UI/ExampleHUD.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scenes/base/Pause.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scenes/misc/Fullscreen.tscn" type="PackedScene" id=4]
-[ext_resource path="res://assets/env_space.tres" type="Environment" id=5]
-[ext_resource path="res://scenes/base/SpaceEnvironment.gd" type="Script" id=6]
-[ext_resource path="res://assets/vendor/ulukai/corona_equirectangular.png" type="Texture" id=7]
 [ext_resource path="res://scenes/ships/fighter01.tscn" type="PackedScene" id=8]
 [ext_resource path="res://scenes/base/CockpitCamera.gd" type="Script" id=9]
 [ext_resource path="res://scenes/base/OutsideCamera.gd" type="Script" id=10]
@@ -27,11 +24,6 @@ directional_shadow_blend_splits = true
 visible = false
 
 [node name="Misc controls" parent="." instance=ExtResource( 4 )]
-
-[node name="SpaceEnvironment" type="WorldEnvironment" parent="."]
-environment = ExtResource( 5 )
-script = ExtResource( 6 )
-background_panorama_image = ExtResource( 7 )
 
 [node name="ChaseCamera" type="InterpolatedCamera" parent="."]
 keep_aspect = 0

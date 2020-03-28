@@ -1,7 +1,6 @@
 extends Spatial
 
 const Ship = preload("res://scenes/base/Ship.gd")
-const SpaceEnvironment = preload("res://scenes/base/SpaceEnvironment.gd")
 const PlayerPilot = preload("res://scenes/pilots/PlayerPilot.gd")
 
 
@@ -11,10 +10,7 @@ onready var outsideCamera: Camera = $Player/OutsideCamera
 
 
 func _setup_env():
-	# Setup environment according to user's settings
-	var environment: Environment = $SpaceEnvironment.environment
-	environment.tonemap_mode = Settings.tonemap
-	environment.ssao_enabled = Settings.ssao
+	pass
 
 
 func _setup_camera(cam: Camera, target: Node = null):
