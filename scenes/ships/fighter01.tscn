@@ -11,7 +11,7 @@
 [ext_resource path="res://assets/fighter01/emission.png" type="Texture" id=9]
 [ext_resource path="res://assets/fighter01/fighter01shield.obj" type="ArrayMesh" id=10]
 
-[sub_resource type="SpatialMaterial" id=1]
+[sub_resource type="StandardMaterial3D" id=1]
 albedo_texture = ExtResource( 7 )
 roughness = 0.5
 roughness_texture = ExtResource( 8 )
@@ -177,10 +177,10 @@ shader_param/show_time = 0.0
 [sub_resource type="BoxShape" id=17]
 extents = Vector3( 1.64048, 1.26262, 4.90446 )
 
-[sub_resource type="ConvexPolygonShape" id=18]
+[sub_resource type="ConvexPolygonShape3D" id=18]
 points = PoolVector3Array( 4.0485, -1.16812, 0.835802, 4.0485, -2.0124, 0.835802, 4.0485, -1.16812, 4.32454, 4.0485, -2.0124, 4.32454, 4.0485, -1.16812, 4.32454, 4.0485, -2.0124, 4.32454, 0.90001, -0.380127, 3.58017, 0.90001, -1.14035, 3.58017, 0.900008, -0.380127, -1.27022, 0.900008, -1.14035, -1.27022, 4.0485, -1.16812, 0.835802, 4.0485, -2.0124, 0.835802, 0.90001, -1.14035, 3.58017, 4.0485, -2.0124, 4.32454, 0.900008, -1.14035, -1.27022, 4.0485, -2.0124, 0.835802, 4.0485, -1.16812, 4.32454, 0.90001, -0.380127, 3.58017, 4.0485, -1.16812, 0.835802, 0.900008, -0.380127, -1.27022, 0.90001, -0.380127, 3.58017, 0.90001, -1.14035, 3.58017, 0.900008, -0.380127, -1.27022, 0.900008, -1.14035, -1.27022, -4.0485, -2.0124, 4.32454, -4.0485, -2.0124, 0.835802, -4.0485, -1.16812, 4.32454, -4.0485, -1.16812, 0.835802, -0.90001, -1.14035, 3.58017, -4.0485, -2.0124, 4.32454, -0.90001, -0.380127, 3.58017, -4.0485, -1.16812, 4.32454, -4.0485, -2.0124, 0.835802, -0.900008, -1.14035, -1.27022, -4.0485, -1.16812, 0.835802, -0.900008, -0.380127, -1.27022, -4.0485, -2.0124, 0.835802, -4.0485, -2.0124, 4.32454, -0.900008, -1.14035, -1.27022, -0.90001, -1.14035, 3.58017, -0.900008, -0.380127, -1.27022, -0.90001, -0.380127, 3.58017, -4.0485, -1.16812, 0.835802, -4.0485, -1.16812, 4.32454, -0.900008, -1.14035, -1.27022, -0.90001, -1.14035, 3.58017, -0.900008, -0.380127, -1.27022, -0.90001, -0.380127, 3.58017 )
 
-[sub_resource type="ConvexPolygonShape" id=19]
+[sub_resource type="ConvexPolygonShape3D" id=19]
 points = PoolVector3Array( 0.272225, 2.97329, 3.1125, 0.272224, 0.685377, -1.0942, 0.272226, 2.9413, 4.72862, 0.272225, 0.685377, 3.1611, 0.304214, -1.16144, 0.317551, 0.304215, -2.54166, 2.60866, 0.304215, -1.19343, 2.95421, 0.304216, -2.54517, 3.98144, 0.272225, 0.685377, 3.1611, -0.272223, 0.685377, 3.1611, 0.272226, 2.9413, 4.72862, -0.272222, 2.9413, 4.72862, -0.272223, 0.685377, 3.1611, -0.272224, 0.685377, -1.0942, -0.272222, 2.9413, 4.72862, -0.272223, 2.97329, 3.1125, -0.272224, 0.685377, -1.0942, 0.272224, 0.685377, -1.0942, -0.272223, 2.97329, 3.1125, 0.272225, 2.97329, 3.1125, 0.272225, 2.97329, 3.1125, 0.272226, 2.9413, 4.72862, -0.272223, 2.97329, 3.1125, -0.272222, 2.9413, 4.72862, -0.304213, -2.54166, 2.60866, -0.304213, -2.54517, 3.98144, 0.304215, -2.54166, 2.60866, 0.304216, -2.54517, 3.98144, 0.304216, -2.54517, 3.98144, -0.304213, -2.54517, 3.98144, 0.304215, -1.19343, 2.95421, -0.304213, -1.19343, 2.95421, -0.304213, -2.54517, 3.98144, -0.304213, -2.54166, 2.60866, -0.304213, -1.19343, 2.95421, -0.304214, -1.16144, 0.317551, -0.304213, -2.54166, 2.60866, 0.304215, -2.54166, 2.60866, -0.304214, -1.16144, 0.317551, 0.304214, -1.16144, 0.317551, -0.304214, -1.16144, 0.317551, 0.304214, -1.16144, 0.317551, -0.304213, -1.19343, 2.95421, 0.304215, -1.19343, 2.95421, 0.272224, 0.685377, -1.0942, -0.272224, 0.685377, -1.0942, 0.272225, 0.685377, 3.1611, -0.272223, 0.685377, 3.1611 )
 
 [node name="Ship" instance=ExtResource( 1 )]
@@ -203,22 +203,22 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.831315, 1.32803, 1.87767 )
 bullet_scene = ExtResource( 4 )
 weapon_model = ExtResource( 5 )
 
-[node name="MeshInstance" type="MeshInstance" parent="." index="4"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." index="4"]
 mesh = ExtResource( 6 )
 material/0 = SubResource( 1 )
 
-[node name="ShieldVisual" type="MeshInstance" parent="." index="5"]
+[node name="ShieldVisual" type="MeshInstance3D" parent="." index="5"]
 mesh = ExtResource( 10 )
 material/0 = SubResource( 16 )
 
-[node name="CollisionShape" type="CollisionShape" parent="." index="6"]
+[node name="CollisionShape" type="CollisionShape3D" parent="." index="6"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.343693, -1.443 )
 shape = SubResource( 17 )
 
-[node name="CollisionShape2" type="CollisionShape" parent="." index="7"]
+[node name="CollisionShape2" type="CollisionShape3D" parent="." index="7"]
 shape = SubResource( 18 )
 
-[node name="CollisionShape3" type="CollisionShape" parent="." index="8"]
+[node name="CollisionShape3" type="CollisionShape3D" parent="." index="8"]
 shape = SubResource( 19 )
 
 [node name="CockpitPosition" type="Position3D" parent="." index="9"]
@@ -227,6 +227,6 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.295701, -3.04477 )
 [node name="ChasePosition" type="Position3D" parent="." index="10"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.28512, 11.4855 )
 
-[node name="VisibilityNotifier" type="VisibilityNotifier" parent="." index="11"]
+[node name="VisibilityNotifier" type="VisibilityNotifier3D" parent="." index="11"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.283201, -1.11098 )
 aabb = AABB( -4.12213, -2.78481, -5.35828, 8.24426, 5.56963, 10.7234 )

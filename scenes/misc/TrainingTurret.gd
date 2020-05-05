@@ -1,4 +1,4 @@
-extends Spatial
+extends Node3D
 # "Training turret" - fires intercept projectiles at the player constantly.
 # I made this to ensure the AI will really know how to aim in order to land
 # hits on their target(s).
@@ -20,7 +20,7 @@ func _process(delta: float):
 		refire_delay -= delta
 
 
-func fire(delta: float, target: Spatial):
+func fire(delta: float, target: Node3D):
 	# Fire at player
 	var to_target = target.global_transform.origin - global_transform.origin
 	var bullet = projectile.instance()

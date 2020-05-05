@@ -2,5 +2,5 @@
 
 [ext_resource path="res://scenes/base/ShipSpawnPoint.gd" type="Script" id=1]
 
-[node name="ShipSpawnPoint" type="Spatial"]
+[node name="ShipSpawnPoint" type="Node3D"]
 script = ExtResource( 1 )

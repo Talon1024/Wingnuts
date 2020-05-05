@@ -1,4 +1,4 @@
-extends Spatial
+extends Node3D
 # Handles properly adding a ship to a mission.
 
 enum PilotType {

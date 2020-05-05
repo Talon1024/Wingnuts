@@ -19,7 +19,7 @@ extents = Vector3( 4.5, 2.4, 3.8 )
 [sub_resource type="BoxShape" id=2]
 extents = Vector3( 2.36493, 2.12703, 6.22412 )
 
-[sub_resource type="SpatialMaterial" id=3]
+[sub_resource type="StandardMaterial3D" id=3]
 albedo_texture = ExtResource( 3 )
 metallic = 0.5
 metallic_specular = 1.0
@@ -47,15 +47,15 @@ shader_param/showTime = null
 
 [node name="Ship" index="0" instance=ExtResource( 1 )]
 
-[node name="Hitbox" type="CollisionShape" parent="." index="2"]
+[node name="Hitbox" type="CollisionShape3D" parent="." index="2"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 6.04101 )
 shape = SubResource( 1 )
 
-[node name="Hitbox2" type="CollisionShape" parent="." index="3"]
+[node name="Hitbox2" type="CollisionShape3D" parent="." index="3"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.478925, -2.4031 )
 shape = SubResource( 2 )
 
-[node name="ShipModel" type="MeshInstance" parent="." index="4"]
+[node name="ShipModel" type="MeshInstance3D" parent="." index="4"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0 )
 mesh = ExtResource( 2 )
 material/0 = SubResource( 3 )
@@ -66,7 +66,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.412, -5.17 )
 [node name="ChasePosition" type="Position3D" parent="." index="6"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.54996, 13.2881 )
 
-[node name="ShieldVisual" type="MeshInstance" parent="." index="7"]
+[node name="ShieldVisual" type="MeshInstance3D" parent="." index="7"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0 )
 mesh = ExtResource( 9 )
 material/0 = SubResource( 4 )

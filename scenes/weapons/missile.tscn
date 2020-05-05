@@ -7,11 +7,11 @@
 radius = 0.74174
 height = 1.78
 
-[node name="KinematicBody" index="0" instance=ExtResource( 1 )]
+[node name="KinematicBody3D" index="0" instance=ExtResource( 1 )]
 
-[node name="MeshInstance" type="MeshInstance" parent="." index="0"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." index="0"]
 mesh = ExtResource( 2 )
 material/0 = null
 
-[node name="CollisionShape" type="CollisionShape" parent="." index="1"]
+[node name="CollisionShape" type="CollisionShape3D" parent="." index="1"]
 shape = SubResource( 1 )

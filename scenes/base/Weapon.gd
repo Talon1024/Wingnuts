@@ -1,4 +1,4 @@
-extends Spatial
+extends Node3D
 # Weapon - controls firing "bullets"
 
 
@@ -15,7 +15,7 @@ var armed: bool = true
 # Add the 3D model for the weapon as a child
 func _ready():
 	if weapon_model:
-		var model = MeshInstance.new()
+		var model = MeshInstance3D.new()
 		model.mesh = weapon_model
 		add_child(model)
 

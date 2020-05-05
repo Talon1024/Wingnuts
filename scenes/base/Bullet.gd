@@ -1,4 +1,4 @@
-extends KinematicBody
+extends KinematicBody3D
 # Bullet - moves around, runs in to things, and hurts them.
 # NOTE: This is not meant to be used directly. Individual weapon types should
 # be new scenes inheriting from Bullet.tscn.

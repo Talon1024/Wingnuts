@@ -1,4 +1,4 @@
-extends Spatial
+extends Node3D
 
 const Ship = preload("res://scenes/base/Ship.gd")
 const PlayerPilot = preload("res://scenes/pilots/PlayerPilot.gd")
