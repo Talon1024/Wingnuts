@@ -28,8 +28,8 @@ var dots = {}
 
 
 func _ready():
-	PlayerInfo.connect("added", self, "_on_player_added")
-	PlayerInfo.connect("removed", self, "_on_player_removed")
+	PlayerInfo.connect("added", self._on_player_added)
+	PlayerInfo.connect("removed", self._on_player_removed)
 	if get_parent().has_method("_get_size"):
 		size = get_parent().call("_get_size")
 
@@ -48,8 +48,8 @@ func _process(delta):
 	for ship in other_ships:
 		if (ship != player and
 				ship.has_method("_visible_on_radar")):
-			if not ship.is_connected("died", self, "_on_ship_died"):
-				ship.connect("died", self, "_on_ship_died", [ship])
+			if not ship.is_connected("died", self._on_ship_died):
+				ship.connect("died", self._on_ship_died, [ship])
 			_set_dot(ship)
 	update()
 

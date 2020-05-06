@@ -4,7 +4,7 @@ extends Node2D
 
 
 func _ready():
-	Settings.connect("fov_changed", self, "on_fov_changed")
+	Settings.connect("fov_changed", self.on_fov_changed)
 	update()
 
 

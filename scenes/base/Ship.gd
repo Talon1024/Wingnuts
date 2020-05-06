@@ -114,7 +114,6 @@ var control_data: Dictionary = {
 }
 var unfire_gun: bool = false
 var unfire_missile: bool = false
-signal weapon_fired
 
 
 # ========== Physics ==========
@@ -143,12 +142,13 @@ const Z_AXIS: Vector3 = Vector3(0,0,1)
 
 # ========== Events ==========
 signal died
+signal weapon_fired
 
 
 func _ready():
 	# Automatically connect weapon_fired signal
 	if get_parent().has_method("_on_weapon_fired"):
-		connect("weapon_fired", get_parent(), "_on_weapon_fired")
+		connect("weapon_fired", get_parent()._on_weapon_fired)
 
 
 func _floorLowValue(value, threshold = .1):

@@ -13,5 +13,5 @@ export(PackedScene) var ship_class
 
 func _ready():
 	var ship = ship_class.instance()
-	ship.connect("weapon_fired", get_parent(), "_on_Player_weapon_fired")
+	ship.connect("weapon_fired", get_parent()._on_Player_weapon_fired)
 	get_parent().add_child(ship)

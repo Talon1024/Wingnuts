@@ -9,8 +9,8 @@ var player: Ship = null
 
 
 func _ready():
-	PlayerInfo.connect("added", self, "_on_player_added")
-	PlayerInfo.connect("removed", self, "_on_player_removed")
+	PlayerInfo.connect("added", self._on_player_added)
+	PlayerInfo.connect("removed", self._on_player_removed)
 
 
 func _process(delta):
