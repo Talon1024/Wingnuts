@@ -1,10 +1,11 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://scenes/base/Space.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/ships/fighter01.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scenes/missions/radartest2.gd" type="Script" id=3]
 [ext_resource path="res://scenes/pilots/AiPilot.gd" type="Script" id=4]
 [ext_resource path="res://scenes/misc/TrainingTurret.tscn" type="PackedScene" id=5]
+[ext_resource path="res://assets/SpaceEnvironments/Wisgohla.tres" type="Environment" id=6]
 
 [sub_resource type="SphereMesh" id=1]
 
@@ -34,24 +35,20 @@ void vertex() {
 
 void fragment() {
 // Color:5
-	vec3 n_out5p0;
-	float n_out5p1;
-	n_out5p0 = vec3(0.382812,1.000000,0.382812);
-	n_out5p1 = 1.000000;
+	vec3 n_out5p0 = vec3(0.382812, 1.000000, 0.382812);
+	float n_out5p1 = 1.000000;
 
 // Input:3
-	vec3 n_out3p0;
-	n_out3p0 = NORMAL;
+	vec3 n_out3p0 = NORMAL;
 
 // Input:4
-	vec3 n_out4p0;
-	n_out4p0 = VIEW;
+	vec3 n_out4p0 = VIEW;
 
 // Fresnel:2
 	bool n_in2p2 = false;
 	float n_in2p3 = 2.00000;
-	float n_out2p0;
-	n_out2p0 = n_in2p2 ? (pow(clamp(dot(n_out3p0, n_out4p0), 0.0, 1.0), n_in2p3)) : (pow(1.0 - clamp(dot(n_out3p0, n_out4p0), 0.0, 1.0), n_in2p3));
+	float n_out2p0 = n_in2p2 ? (pow(clamp(dot(n_out3p0, n_out4p0), 0.0, 1.0), n_in2p3)) : (pow(1.0 - clamp(dot(n_out3p0, n_out4p0), 0.0, 1.0), n_in2p3));
+
 // Output:0
 	ALBEDO = n_out5p0;
 	ALPHA = n_out2p0;
@@ -73,7 +70,7 @@ nodes/fragment/4/node = SubResource( 4 )
 nodes/fragment/4/position = Vector2( -280, 260 )
 nodes/fragment/5/node = SubResource( 5 )
 nodes/fragment/5/position = Vector2( 140, 80 )
-nodes/fragment/connections = PoolIntArray( 3, 0, 2, 0, 4, 0, 2, 1, 2, 0, 0, 1, 5, 0, 0, 0 )
+nodes/fragment/connections = PackedInt32Array( 3, 0, 2, 0, 4, 0, 2, 1, 2, 0, 0, 1, 5, 0, 0, 0 )
 
 [sub_resource type="ShaderMaterial" id=7]
 shader = SubResource( 6 )
@@ -106,24 +103,20 @@ void vertex() {
 
 void fragment() {
 // Color:5
-	vec3 n_out5p0;
-	float n_out5p1;
-	n_out5p0 = vec3(1.000000,0.501961,0.164706);
-	n_out5p1 = 1.000000;
+	vec3 n_out5p0 = vec3(1.000000, 0.501961, 0.164706);
+	float n_out5p1 = 1.000000;
 
 // Input:3
-	vec3 n_out3p0;
-	n_out3p0 = NORMAL;
+	vec3 n_out3p0 = NORMAL;
 
 // Input:4
-	vec3 n_out4p0;
-	n_out4p0 = VIEW;
+	vec3 n_out4p0 = VIEW;
 
 // Fresnel:2
 	bool n_in2p2 = false;
 	float n_in2p3 = 2.00000;
-	float n_out2p0;
-	n_out2p0 = n_in2p2 ? (pow(clamp(dot(n_out3p0, n_out4p0), 0.0, 1.0), n_in2p3)) : (pow(1.0 - clamp(dot(n_out3p0, n_out4p0), 0.0, 1.0), n_in2p3));
+	float n_out2p0 = n_in2p2 ? (pow(clamp(dot(n_out3p0, n_out4p0), 0.0, 1.0), n_in2p3)) : (pow(1.0 - clamp(dot(n_out3p0, n_out4p0), 0.0, 1.0), n_in2p3));
+
 // Output:0
 	ALBEDO = n_out5p0;
 	ALPHA = n_out2p0;
@@ -145,7 +138,7 @@ nodes/fragment/4/node = SubResource( 11 )
 nodes/fragment/4/position = Vector2( -180, 260 )
 nodes/fragment/5/node = SubResource( 12 )
 nodes/fragment/5/position = Vector2( 200, 100 )
-nodes/fragment/connections = PoolIntArray( 3, 0, 2, 0, 4, 0, 2, 1, 2, 0, 0, 1, 5, 0, 0, 0 )
+nodes/fragment/connections = PackedInt32Array( 3, 0, 2, 0, 4, 0, 2, 1, 2, 0, 0, 1, 5, 0, 0, 0 )
 
 [sub_resource type="ShaderMaterial" id=14]
 shader = SubResource( 13 )
@@ -153,15 +146,16 @@ shader = SubResource( 13 )
 [node name="Node3D" instance=ExtResource( 1 )]
 script = ExtResource( 3 )
 
-[node name="Ship" parent="." index="7" instance=ExtResource( 2 )]
+[node name="Ship" parent="." index="6" instance=ExtResource( 2 )]
 transform = Transform( 0.625821, 0.679544, -0.382843, -0.579679, 0.733635, 0.354616, 0.521844, 0, 0.853041, 15.6774, -3.56697e-07, -13.0064 )
 
 [node name="Pilot" type="Node" parent="Ship" index="12"]
 script = ExtResource( 4 )
 
-[node name="DebugInfo" type="Control" parent="." index="8"]
+[node name="DebugInfo" type="Control" parent="." index="7"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+script = null
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -172,6 +166,7 @@ anchor_right = 0.5
 margin_left = -47.0
 margin_right = 47.0
 margin_bottom = 50.0
+script = null
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -179,11 +174,13 @@ __meta__ = {
 [node name="YawContainer" type="HBoxContainer" parent="DebugInfo/DebugInfoContainer" index="0"]
 margin_right = 94.0
 margin_bottom = 14.0
+script = null
 
 [node name="Yaw" type="Label" parent="DebugInfo/DebugInfoContainer/YawContainer" index="0"]
 margin_right = 14.0
 margin_bottom = 14.0
 text = "D:"
+script = null
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -192,6 +189,7 @@ __meta__ = {
 margin_left = 18.0
 margin_right = 18.0
 margin_bottom = 14.0
+script = null
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -200,40 +198,52 @@ __meta__ = {
 margin_top = 18.0
 margin_right = 94.0
 margin_bottom = 32.0
+script = null
 
 [node name="Pitch" type="Label" parent="DebugInfo/DebugInfoContainer/PitchContainer" index="0"]
 margin_right = 12.0
 margin_bottom = 14.0
 text = "X:"
+script = null
 
 [node name="PitchValue" type="Label" parent="DebugInfo/DebugInfoContainer/PitchContainer" index="1"]
 margin_left = 16.0
 margin_right = 16.0
 margin_bottom = 14.0
+script = null
 
 [node name="RollContainer" type="HBoxContainer" parent="DebugInfo/DebugInfoContainer" index="2"]
 margin_top = 36.0
 margin_right = 94.0
 margin_bottom = 50.0
+script = null
 
 [node name="Roll" type="Label" parent="DebugInfo/DebugInfoContainer/RollContainer" index="0"]
 margin_right = 11.0
 margin_bottom = 14.0
 text = "Y:"
+script = null
 
 [node name="RollValue" type="Label" parent="DebugInfo/DebugInfoContainer/RollContainer" index="1"]
 margin_left = 15.0
 margin_right = 15.0
 margin_bottom = 14.0
+script = null
 
-[node name="InterceptTarget" type="MeshInstance3D" parent="." index="9"]
+[node name="InterceptTarget" type="MeshInstance3D" parent="." index="8"]
 mesh = SubResource( 1 )
 material/0 = SubResource( 7 )
+script = null
 
-[node name="InterceptTarget2" type="MeshInstance3D" parent="." index="10"]
+[node name="InterceptTarget2" type="MeshInstance3D" parent="." index="9"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.17149 )
 mesh = SubResource( 8 )
 material/0 = SubResource( 14 )
+script = null
 
-[node name="Node3D" parent="." index="11" instance=ExtResource( 5 )]
+[node name="Node3D" parent="." index="10" instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 46.4216, 67.3898, 0 )
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." index="11"]
+environment = ExtResource( 6 )
+script = null

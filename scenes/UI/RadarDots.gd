@@ -22,14 +22,18 @@ static func position_for(from: Transform, thing_pos: Vector3) -> Vector2:
 const Ship = preload("res://scenes/base/Ship.gd")
 
 
+@onready var me = self as Object
+@onready var dead = Callable(me, "_on_ship_died")
 var player: Ship = null
 var size: Vector2
 var dots = {}
 
 
 func _ready():
-	PlayerInfo.connect("added", self._on_player_added)
-	PlayerInfo.connect("removed", self._on_player_removed)
+	var added: Callable = Callable(me, "_on_player_added")
+	var removed: Callable = Callable(me, "_on_player_removed")
+	PlayerInfo.connect("added", added)
+	PlayerInfo.connect("removed", removed)
 	if get_parent().has_method("_get_size"):
 		size = get_parent().call("_get_size")
 
@@ -48,8 +52,8 @@ func _process(delta):
 	for ship in other_ships:
 		if (ship != player and
 				ship.has_method("_visible_on_radar")):
-			if not ship.is_connected("died", self._on_ship_died):
-				ship.connect("died", self._on_ship_died, [ship])
+			if not ship.is_connected("died", dead):
+				ship.connect("died", dead, [ship])
 			_set_dot(ship)
 	update()
 
@@ -66,10 +70,10 @@ func _set_dot(ship: Ship):
 			hue = .66666666666  # .6666666 = 240 degrees = blue
 		var colour = Color().from_hsv(hue, 1, 1, 1)
 		dots[ship_id] = {
-			pos = abs_position_for(player.transform,
+			"pos": abs_position_for(player.transform,
 				ship.translation, size),
-			image = image,
-			color = colour,
+			"image": image,
+			"color": colour,
 		}
 
 

@@ -1,5 +1,6 @@
 extends "res://scenes/pilots/Pilot.gd"
-class_name PilotPlayer, "res://editor/icons/pilot.png"
+class_name PilotPlayer
+@icon("res://editor/icons/pilot.png")
 
 var yaw_amount: float
 var pitch_amount: float
@@ -13,15 +14,7 @@ var throttle_increment: float
 # State of each keyboard action as defined in the project settings.
 # TODO: Move to the KeyboardControls node
 var key_state = {}
-onready var control_state: Node = $ControlState
-var state_commands = [
-	"pitch_up",
-	"pitch_down",
-	"turn_left",
-	"turn_right",
-	"roll_left",
-	"roll_right",
-]
+# onready var control_state: Node = $ControlState
 
 
 # Look at the stored key state, and if the "pos" action is true, return 1.0,
@@ -46,16 +39,18 @@ func handle_boolean(action: String, event: InputEvent, orig_value: bool) -> bool
 	return orig_value
 
 
-# Set the default values for the actions to track with key_state.
-func _ready():
-	for command in state_commands:
-		key_state[command] = false
-
-
 # Handle input events
 func _input(event):
+	var state_commands = [
+		"pitch_up",
+		"pitch_down",
+		"turn_left",
+		"turn_right",
+		"roll_left",
+		"roll_right",
+	]
 	for command in state_commands:
-		key_state[command] = handle_boolean(command, event, key_state[command])
+		key_state[command] = handle_boolean(command, event, key_state.get(command, false))
 	if event.is_action_pressed("speed_stop"):
 		throttle = 0
 	elif event.is_action_pressed("speed_full"):

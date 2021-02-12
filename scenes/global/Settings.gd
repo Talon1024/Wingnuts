@@ -13,9 +13,9 @@ enum WindowType {
 	WINDOW_BORDERLESS,
 }
 
-var resolution: Vector2 = Vector2(1024, 576)
-var window_type: int = WindowType.WINDOW_FULLSCREEN
-var bloom_level: int = BloomLevel.BLOOM_HEAVY
+var resolution: Vector2 = DisplayServer.screen_get_size()
+# var window_type: int = WindowType.WINDOW_FULLSCREEN
+# var bloom_level: int = BloomLevel.BLOOM_HEAVY
 var tonemap: int = Environment.TONE_MAPPER_ACES # Environment.ToneMapper
 var ssao: bool = true
 var shadows: bool = true

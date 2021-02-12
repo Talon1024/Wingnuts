@@ -7,9 +7,9 @@ extends Node3D
 const Intercept = preload("res://scenes/util/intercept.gd")
 
 
-onready var refire_delay = 0
-onready var target = get_node("../Player")
-export(PackedScene) var projectile
+@onready var refire_delay = 0
+@onready var target = get_node("../Player")
+@export var projectile: PackedScene
 
 
 func _process(delta: float):

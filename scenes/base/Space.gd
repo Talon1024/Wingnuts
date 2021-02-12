@@ -4,23 +4,23 @@ const Ship = preload("res://scenes/base/Ship.gd")
 const PlayerPilot = preload("res://scenes/pilots/PlayerPilot.gd")
 
 
-onready var cockpitCamera: Camera = $Player/Camera
-onready var chaseCamera: InterpolatedCamera = $ChaseCamera
-onready var outsideCamera: Camera = $Player/OutsideCamera
+@onready var cockpitCamera: Camera3D = $Player/Camera
+@onready var chaseCamera: Camera3D = $ChaseCamera
+@onready var outsideCamera: Camera3D = $Player/OutsideCamera
 
 
 func _setup_env():
 	pass
 
 
-func _setup_camera(cam: Camera, target: Node = null):
+func _setup_camera(cam: Camera3D, target: Node = null):
 	if target:
 		cam.transform = target.transform
 		if cam.has_method("set_target"):
 			# It's an InterpolatedCamera
 			cam.set_target(target)
 			cam.enabled = true
-	cam.keep_aspect = Camera.KEEP_WIDTH
+	cam.keep_aspect = Camera3D.KEEP_WIDTH
 	cam.far = 1000
 	cam.fov = Settings.fov
 
@@ -37,10 +37,10 @@ func _ready():
 	PlayerInfo.ship.visible = false
 	PlayerInfo.ship.add_child(PlayerPilot.new())
 	PlayerInfo.emit_signal("added", PlayerInfo.ship)
-	OS.window_size = Settings.resolution
+	DisplayServer.window_set_size(Settings.resolution)
 	_setup_env()
 	for child in get_children():
-		if child is Light:
+		if child is Light3D:
 			child.shadow_enabled = Settings.shadows
 
 

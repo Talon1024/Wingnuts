@@ -1,7 +1,7 @@
-extends Camera
+extends Camera3D
 
 
-onready var radius = translation.length()
+@onready var radius = translation.length()
 var phi = 0
 var theta = PI / 2
 

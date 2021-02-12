@@ -1,10 +1,10 @@
 extends "res://scenes/base/Space.gd"
 
-onready var yaw_display = $DebugInfo/DebugInfoContainer/YawContainer/YawValue
-onready var pitch_display = $DebugInfo/DebugInfoContainer/PitchContainer/PitchValue
-onready var roll_display = $DebugInfo/DebugInfoContainer/RollContainer/RollValue
-onready var enemy_ship = $Ship
-onready var player_ship = $Player
+@onready var yaw_display = $DebugInfo/DebugInfoContainer/YawContainer/YawValue
+@onready var pitch_display = $DebugInfo/DebugInfoContainer/PitchContainer/PitchValue
+@onready var roll_display = $DebugInfo/DebugInfoContainer/RollContainer/RollValue
+@onready var enemy_ship = $Ship
+@onready var player_ship = $Player
 const Spherical = preload("res://scenes/util/spherical.gd")
 const Intercept = preload("res://scenes/util/intercept.gd")
 

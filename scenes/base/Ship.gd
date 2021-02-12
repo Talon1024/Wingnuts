@@ -72,22 +72,22 @@ class ShieldUnit:
 
 
 # ========== Resources ==========
-onready var shield_visual: Node = $ShieldVisual
+@onready var shield_visual: Node = $ShieldVisual
 
 
 # ========== Stats ==========
-export var base_health: int = 100
-export var max_speed: float = 25
-export var afterburner_speed: float = 100
-#export var afterburner_acceleration: float = 50
-#export var acceleration: float = 25
-#export var shieldLevel: int = 1  # Shield capacitor level
-export var pitch_speed: float = 90  # DPS
-export var yaw_speed: float = 90
-export var roll_speed: float = 90
-#export var mass: float = 100  # Used to determine damage and knockback
-onready var health: int = base_health
-export var on_radar: bool = true
+@export var base_health: int = 100
+@export var max_speed: float = 25
+@export var afterburner_speed: float = 100
+#@export var afterburner_acceleration: float = 50
+#@export var acceleration: float = 25
+#@export var shieldLevel: int = 1  # Shield capacitor level
+@export var pitch_speed: float = 90  # DPS
+@export var yaw_speed: float = 90
+@export var roll_speed: float = 90
+#@export var mass: float = 100  # Used to determine damage and knockback
+@onready var health: int = base_health
+@export var on_radar: bool = true
 var power: int = 20 # Amount of energy available for weapons
 var power_regen: int = 2
 
@@ -95,13 +95,13 @@ var power_regen: int = 2
 # ========== AI/Gameplay ==========
 var alignment: int = 0  # Team/faction association
 var forced_dot_hue: float = -1  # Hue to force dot to appear as. -1 disables forced hue
-export(Texture) var radar_dot = load("res://assets/UI/HUD/radar_dot.png")
-export(Texture) var active_radar_dot = load("res://assets/UI/HUD/radar_dot_active.png")
+@export var radar_dot: Texture = load("res://assets/UI/HUD/radar_dot.png")
+@export var active_radar_dot: Texture = load("res://assets/UI/HUD/radar_dot_active.png")
 
 
 # ========== Control ==========
 var target_velocity: Vector3 = Vector3(0,0,0)
-onready var pilot = $Pilot
+@onready var pilot = $Pilot
 var control_data: Dictionary = {
 	"yaw": 0.0,
 	"pitch": 0.0,
@@ -118,20 +118,35 @@ var unfire_missile: bool = false
 
 # ========== Physics ==========
 var velocity: Vector3 = Vector3(0,0,0)
-var pitch_delta: float = 0 setget _set_pitch_delta
-var yaw_delta: float = 0 setget _set_yaw_delta
-var roll_delta: float = 0 setget _set_roll_delta
-onready var actual_pitch_speed: float = deg2rad(pitch_speed)
-onready var actual_yaw_speed: float = deg2rad(yaw_speed)
-onready var actual_roll_speed: float = deg2rad(roll_speed)
+var pitch_delta: 
+	set(value):
+		_set_pitch_delta(value)
+var yaw_delta:
+	set(value):
+		_set_yaw_delta(value)
+var roll_delta:
+	set(value):
+		_set_roll_delta(value)
+@onready var actual_pitch_speed: float = deg2rad(pitch_speed)
+@onready var actual_yaw_speed: float = deg2rad(yaw_speed)
+@onready var actual_roll_speed: float = deg2rad(roll_speed)
 
 
 # ========== Equipment ==========
 var shield_unit: ShieldUnit = ShieldUnit.new([50, 50])
-onready var guns = $Guns.get_children()  # Change to GunUnit class
-onready var missiles = $Missiles.get_children()  # Change to MissileUnit class
+@onready var guns = $Guns.get_children()  # Change to GunUnit class
+@onready var missiles = $Missiles.get_children()  # Change to MissileUnit class
 #var active_special = 0  # Special ability, such as cloaking device
-var shield_show_time: float = 0 setget set_shield_time
+var shield_show_time:
+	set(value):
+		if shield_visual:
+			if shield_time > 0:
+				shield_visual.visible = true
+				var shield_mtl = shield_visual.get_surface_material(0)
+				if shield_mtl.has_method("set_shader_param"):
+					shield_mtl.set_shader_param("show_time", shield_time)
+			else:
+				shield_visual.visible = false
 
 
 # ========== Constants ==========
@@ -149,6 +164,7 @@ func _ready():
 	# Automatically connect weapon_fired signal
 	if get_parent().has_method("_on_weapon_fired"):
 		connect("weapon_fired", get_parent()._on_weapon_fired)
+		pass
 
 
 func _floorLowValue(value, threshold = .1):
@@ -158,14 +174,7 @@ func _floorLowValue(value, threshold = .1):
 
 
 func set_shield_time(shield_time: float):
-	if shield_visual:
-		if shield_time > 0:
-			shield_visual.visible = true
-			var shield_mtl = shield_visual.get_surface_material(0)
-			if shield_mtl.has_method("set_shader_param"):
-				shield_mtl.set_shader_param("show_time", shield_time)
-		else:
-			shield_visual.visible = false
+	pass
 
 
 # Override these if the ship has thrust pods that rotate when the ship turns
@@ -220,18 +229,18 @@ func _process(delta):
 
 	if control_data.fire_gun:
 		unfire_gun = true
-		_handle_firing(guns, "_fire")
+		_handle_firing(guns, &"_fire")
 	else:
 		if unfire_gun:
-			_handle_firing(guns, "_unfire")
+			_handle_firing(guns, &"_unfire")
 			unfire_gun = false
 
 	if control_data.fire_missile:
 		unfire_missile = true
-		_handle_firing(missiles, "_fire")
+		_handle_firing(missiles, &"_fire")
 	else:
 		if unfire_missile:
-			_handle_firing(missiles, "_unfire")
+			_handle_firing(missiles, &"_unfire")
 			unfire_missile = false
 
 	if shield_unit:

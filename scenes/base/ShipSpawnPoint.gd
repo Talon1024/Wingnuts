@@ -8,8 +8,8 @@ enum PilotType {
 	PILOT_CAPSHIP,
 }
 
-export(PilotType) var pilot_type
-export(PackedScene) var ship_class
+@export var pilot_type: PilotType
+@export var ship_class: PackedScene
 
 func _ready():
 	var ship = ship_class.instance()

@@ -1,8 +1,8 @@
-extends Viewport
+extends SubViewport
 class_name RadarDisplay
 
 
-export var radar_size: Vector2 = Vector2(128, 128)
+@export var radar_size: Vector2 = Vector2(128, 128)
 
 
 func _ready():

@@ -2,8 +2,8 @@ extends Node3D
 # Weapon - controls firing "bullets"
 
 
-export(PackedScene) var bullet_scene
-export(Mesh) var weapon_model
+@export var bullet_scene: PackedScene
+@export var weapon_model: Mesh
 
 
 var max_ammo := 0
